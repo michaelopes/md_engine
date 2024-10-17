@@ -14,7 +14,6 @@ class _SettingsViewState
     extends MdViewModelState<SettingsView, SettingsViewModel> {
   _SettingsViewState() : super(SettingsViewModel());
 
-  final _cou = ValueNotifier(0);
   int _cou2 = 0;
 
   bool remove = false;

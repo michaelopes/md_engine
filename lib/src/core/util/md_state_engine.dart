@@ -3,74 +3,35 @@ import 'package:md_engine/md_engine.dart';
 import 'package:collection/collection.dart';
 import 'package:md_engine/src/collections/md_collection.dart';
 
+final class MdStateObserver {
+  late Object? snapshot;
+  final Object? Function() checker;
+
+  MdStateObserver({
+    required this.checker,
+  }) {
+    snapshot = checker();
+  }
+
+  bool get hasChange {
+    final result = snapshot != checker();
+    snapshot = checker();
+    return result;
+  }
+}
+
 final class _MdStateEngineItem {
   final MdState state;
   final MdState? parentState;
-  final List<Object?> Function() observables;
-  List<Object?> observablesSnapshot = [];
-
-  final List<_MdStateEngineItem> childStateEngineItems = [];
+  final List<MdStateObserver> observables;
 
   _MdStateEngineItem({
     required this.state,
     required this.observables,
     this.parentState,
-  }) {
-    snapshot();
-  }
+  });
 
-  void snapshot() {
-    observablesSnapshot = _getCurrentObservables;
-  }
-
-  List<Object?> get _getCurrentObservables {
-    return _getCurrentObservablesRecursive(observables(), []);
-  }
-
-  List<Object?> _getCurrentObservablesRecursive(
-      List<Object?> observables, List<Object?> accumulator) {
-    if (observables.isEmpty) {
-      return accumulator;
-    }
-    var first = observables.first;
-    var remaining = observables.sublist(1);
-
-    if (first is MdStateObservable) {
-      return _getCurrentObservablesRecursive(
-        remaining,
-        accumulator..addAll(first.observables),
-      );
-    } else {
-      return _getCurrentObservablesRecursive(
-        remaining,
-        accumulator..add(first),
-      );
-    }
-  }
-
-  bool get hasChange => compareLists(
-        observablesSnapshot,
-        _getCurrentObservables,
-      );
-
-  bool compareLists(List<Object?> list1, List<Object?> list2) {
-    if (list1.length != list2.length) {
-      return true;
-    }
-    bool result = !IterableZip([list1, list2]).every((e) {
-      final v1 = e[0];
-      final v2 = e[1];
-      if (v2 is MdCollection) {
-        final r = v2.hasChange;
-        if (r) {
-          v2.observed();
-        }
-        return !r;
-      }
-      return v1 == v2;
-    });
-    return result;
-  }
+  bool get hasChange => observables.any((e) => e.hasChange);
 }
 
 final class MdStateEngine {
@@ -83,7 +44,7 @@ final class MdStateEngine {
 
   void register(
     MdState state,
-    List<Object?> Function() observables, {
+    List<MdStateObs> observables, {
     MdState? parentState,
   }) {
     final index =
@@ -98,7 +59,7 @@ final class MdStateEngine {
     if (index == -1) {
       _storage.add(
         _MdStateEngineItem(
-          observables: observables,
+          observables: _processObservers(observables),
           state: state,
           parentState: parentItem?.parentState ?? parentState,
         ),
@@ -107,12 +68,26 @@ final class MdStateEngine {
       _storage.insert(
         index,
         _MdStateEngineItem(
-          observables: observables,
+          observables: _processObservers(observables),
           state: state,
           parentState: parentItem?.parentState ?? parentState,
         ),
       );
     }
+  }
+
+  List<MdStateObserver> _processObservers(List<MdStateObs> observables) {
+    final result = <MdStateObserver>[];
+    for (var item in observables) {
+      final value = item();
+      if (value is MdStateObservable) {
+        result.addAll(_processObservers(value.observables));
+      } else if (value is MdCollection) {
+        result.add(MdStateObserver(checker: () => value.hasChange));
+      }
+      result.add(MdStateObserver(checker: item));
+    }
+    return result;
   }
 
   void removeByState(MdState state) {
@@ -153,9 +128,7 @@ final class MdStateEngine {
     final target = _targetObserver;
     if (target != null) {
       if (target.hasChange) {
-        if (target.state.notifyView()) {
-          target.snapshot();
-        }
+        target.state.notifyView();
       } else {
         final items = _storage.where(
           (e) =>
@@ -165,9 +138,7 @@ final class MdStateEngine {
         if (items.isNotEmpty) {
           final item = _checkAndGetChangedChildStateItem(items);
           if (item != null) {
-            if (item.state.notifyView()) {
-              item.snapshot();
-            }
+            item.state.notifyView();
           }
         }
       }

@@ -1,13 +1,21 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:md_engine/md_engine.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:md_engine/src/core/util/md_delegate.dart';
 import 'package:md_engine/src/core/util/md_state_engine.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:qlevar_router/qlevar_router.dart';
+import 'package:universal_platform/universal_platform.dart';
 
+import 'core/http_driver/md_dio_http_driver.dart';
+import 'core/http_driver/md_http_driver_interface.dart';
+import 'core/http_driver/md_http_driver_options.dart';
 import 'core/i18n/app_localizations_delegate.dart';
 import 'core/i18n/i18n.dart';
 import 'core/i18n/md_translate_options.dart';
+import 'core/util/md_screen_utility.dart';
 
 typedef AppStepCallback = Future<void> Function();
 
@@ -67,10 +75,10 @@ class MdApp {
     String appName = '',
     String Function(BuildContext)? onGenerateTitle,
     Color? color,
-    ThemeData? theme,
-    ThemeData? darkTheme,
-    ThemeData? highContrastTheme,
-    ThemeData? highContrastDarkTheme,
+    ThemeData Function()? theme,
+    ThemeData Function()? darkTheme,
+    ThemeData Function()? highContrastTheme,
+    ThemeData Function()? highContrastDarkTheme,
     ThemeMode? themeMode = ThemeMode.system,
     Duration themeAnimationDuration = kThemeAnimationDuration,
     Curve themeAnimationCurve = Curves.linear,
@@ -91,7 +99,7 @@ class MdApp {
     await beforeEnsureInitialized?.call();
     WidgetsFlutterBinding.ensureInitialized();
     QR.setUrlStrategy();
-    await afterEnsureInitialized?.call();
+
     if (translationOptions != null) {
       await I18n.I.init(
         filePath: translationOptions.filePath,
@@ -113,14 +121,18 @@ class MdApp {
       this.appName = appName;
     }
     this.flavor = flavor;
+    GetIt.I.registerFactory<IMdHttpDriver>(() => MdDioHttpDriver());
+    await afterEnsureInitialized?.call();
     runApp(
       _MdApp(
         title: appName,
         routes: routes,
         enableI18n: translationOptions != null,
-        theme: theme,
+        theme: theme?.call(),
         dispose: dispose,
-        initState: initState,
+        initState: (context) {
+          initState?.call();
+        },
         actions: actions,
         appKey: key,
         backButtonDispatcher: backButtonDispatcher,
@@ -128,11 +140,11 @@ class MdApp {
         checkerboardOffscreenLayers: checkerboardOffscreenLayers,
         checkerboardRasterCacheImages: checkerboardRasterCacheImages,
         color: color,
-        darkTheme: darkTheme,
+        darkTheme: darkTheme?.call(),
         debugShowCheckedModeBanner: debugShowCheckedModeBanner,
         debugShowMaterialGrid: debugShowMaterialGrid,
-        highContrastDarkTheme: highContrastDarkTheme,
-        highContrastTheme: highContrastTheme,
+        highContrastDarkTheme: highContrastDarkTheme?.call(),
+        highContrastTheme: highContrastTheme?.call(),
         localeListResolutionCallback: localeListResolutionCallback,
         onGenerateTitle: onGenerateTitle,
         restorationScopeId: restorationScopeId,
@@ -186,7 +198,7 @@ class _MdApp extends StatefulWidget {
   final Map<Type, Action<Intent>>? actions;
   final String? restorationScopeId;
   final ScrollBehavior? scrollBehavior;
-  final VoidCallback? initState;
+  final void Function(BuildContext context)? initState;
   final VoidCallback? dispose;
   final GlobalKey<NavigatorState>? navigatorKey;
   final List<NavigatorObserver>? navigatorObservers;
@@ -240,7 +252,6 @@ class __MdAppState extends State<_MdApp> {
     if (widget.enableProativeState) {
       MdStateEngine.I.start();
     }
-    widget.initState?.call();
   }
 
   @override
@@ -260,6 +271,7 @@ class __MdAppState extends State<_MdApp> {
 
   @override
   Widget build(BuildContext context) {
+    MdScreenUtility.I.setContext(context);
     return MaterialApp.router(
       key: widget.appKey,
       actions: widget.actions,

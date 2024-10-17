@@ -17,12 +17,9 @@ class MdMap<K, V> with MapMixin<K, V> implements MdCollection {
 
   @override
   bool get hasChange {
-    return _hasChange;
-  }
-
-  @override
-  void observed() {
+    final result = _hasChange;
     _hasChange = false;
+    return result;
   }
 
   void _makeChange() {

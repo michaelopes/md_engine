@@ -8,8 +8,10 @@ class MdSessionTitle extends MdStateless {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: theme.textTheme.headlineSmall?.copyWith(
-          fontWeight: FontWeight.w700, color: theme.colorScheme.onBackground),
+      style: theme.textTheme.bodyLarge?.copyWith(
+        fontWeight: FontWeight.w700,
+        color: theme.colorScheme.onBackground,
+      ),
     );
   }
 }

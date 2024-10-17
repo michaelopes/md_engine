@@ -5,7 +5,7 @@ import '../util/md_state_engine.dart';
 
 abstract class MdWidgetState<TWidget extends StatefulWidget>
     extends MdState<TWidget> {
-  List<Object?> get observables;
+  List<MdStateObs> get observables;
 
   late final MdState? _mdState;
 
@@ -23,24 +23,7 @@ abstract class MdWidgetState<TWidget extends StatefulWidget>
   }
 
   void _registerStateWatch() {
-    assert(
-      observables.whereType<Function>().isEmpty,
-      'Error on (${toString()}). **"Function" type is not suported to observables.**',
-    );
-    assert(
-      observables.whereType<List>().isEmpty,
-      'Error on (${toString()}). **"List" type is not suported to observables. Please use MdList.**',
-    );
-    assert(
-      observables.whereType<List>().isEmpty,
-      'Error on (${toString()}). **"Map" type is not suported to observables. Please use MdMap.**',
-    );
-    assert(
-      observables.whereType<List>().isEmpty,
-      'Error on (${toString()}). **"Set" type is not suported to observables. Please use MdSet.**',
-    );
-
-    MdStateEngine.I.register(this, () => observables, parentState: _mdState!);
+    MdStateEngine.I.register(this, observables, parentState: _mdState!);
   }
 
   @override

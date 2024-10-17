@@ -1,6 +1,7 @@
 // ignore_for_file: no_logic_in_create_state
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:md_engine/src/core/util/md_toolkit.dart';
 
 import '../core/base/md_state.dart';
 import '../core/util/md_debouncer.dart';
@@ -156,6 +157,7 @@ class _MdTextFormFieldState extends MdState<MdTextFormField> {
       focusedBorder: theme.inputDecorationTheme.focusedBorder,
       disabledBorder: theme.inputDecorationTheme.disabledBorder,
       errorStyle: theme.inputDecorationTheme.errorStyle,
+      hoverColor: Colors.transparent,
     );
   }
 
@@ -277,17 +279,24 @@ class _MdTextFormFieldState extends MdState<MdTextFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.topLabel) ...[
-          Text(
-            widget.labelText ?? "",
-            style: theme.inputDecorationTheme.labelStyle,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(
+              widget.labelText ?? "",
+              style: theme.inputDecorationTheme.labelStyle,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
-          const SizedBox(
-            height: 4,
-          )
         ],
         TextFormField(
+          style: TextStyle(
+            color: theme.inputDecorationTheme.fillColor != null &&
+                    theme.inputDecorationTheme.filled
+                ? MdToolkit.I
+                    .getColorInverted(theme.inputDecorationTheme.fillColor!)
+                : null,
+          ),
           minLines: widget.lines,
           maxLines: widget.lines,
           maxLength: widget.maxLength,
@@ -306,6 +315,7 @@ class _MdTextFormFieldState extends MdState<MdTextFormField> {
           enableInteractiveSelection: widget.enableInteractiveSelection,
           textInputAction: widget.textInputAction,
           onFieldSubmitted: widget.onFieldSubmitted,
+          cursorHeight: 14.0,
         ),
       ],
     );
@@ -364,6 +374,43 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
   @override
   InputDecoration get _inputDecoration {
     return _baseInputDecoration.copyWith(
+      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      border: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      errorBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      disabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      focusedErrorBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
       label: widget.labelText != null
           ? Text(
               widget.labelText ?? "",
@@ -394,6 +441,12 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = theme.inputDecorationTheme.fillColor != null &&
+            theme.inputDecorationTheme.filled
+        ? MdToolkit.I.getColorInverted(theme.inputDecorationTheme.fillColor!)
+        : null;
+
+    print(_errorMessage);
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -411,8 +464,16 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
                           ? theme.inputDecorationTheme.focusedBorder?.borderSide
                                   .color ??
                               theme.colorScheme.primary
-                          : theme.colorScheme.error,
-                      width: 1,
+                          : theme.inputDecorationTheme.errorBorder?.borderSide
+                                  .color ??
+                              theme.colorScheme.error,
+                      width: (_errorMessage != null
+                                  ? theme.inputDecorationTheme.errorBorder
+                                      ?.borderSide
+                                  : theme.inputDecorationTheme.focusedBorder
+                                      ?.borderSide)
+                              ?.width ??
+                          1,
                     )
                   : Border.all(
                       color: theme.inputDecorationTheme.outlineBorder?.color ??
@@ -431,11 +492,11 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
                     child: Theme(
                       data: Theme.of(context).copyWith(
                         textTheme: TextTheme(
-                          titleMedium: theme.textTheme.titleMedium?.copyWith(
+                          bodyLarge: theme.textTheme.bodyLarge?.copyWith(
+                            decoration: TextDecoration.none,
                             color: !widget.enabled
-                                ? theme.textTheme.titleMedium?.color
-                                    ?.withOpacity(.6)
-                                : null,
+                                ? textColor?.withOpacity(.95)
+                                : textColor?.withOpacity(.6),
                           ),
                         ),
                         colorScheme: Theme.of(context).colorScheme.copyWith(
@@ -443,6 +504,7 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
                             ),
                       ),
                       child: TextFormField(
+                        style: theme.textTheme.bodyLarge,
                         minLines: widget.lines,
                         maxLines: widget.lines,
                         maxLength: widget.maxLength,
@@ -471,6 +533,7 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
                             widget.enableInteractiveSelection,
                         textInputAction: widget.textInputAction,
                         onFieldSubmitted: widget.onFieldSubmitted,
+                        cursorHeight: 22.0,
                       ),
                     ),
                   ),
@@ -538,6 +601,42 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
   @override
   InputDecoration get _inputDecoration {
     return _baseInputDecoration.copyWith(
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      border: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      errorBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      disabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
+      focusedErrorBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+      ),
       floatingLabelBehavior: FloatingLabelBehavior.always,
       floatingLabelStyle: theme.inputDecorationTheme.labelStyle,
       labelStyle: theme.inputDecorationTheme.labelStyle,
@@ -568,6 +667,10 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = theme.inputDecorationTheme.fillColor != null &&
+            theme.inputDecorationTheme.filled
+        ? MdToolkit.I.getColorInverted(theme.inputDecorationTheme.fillColor!)
+        : null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -604,11 +707,11 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
                   child: Theme(
                     data: Theme.of(context).copyWith(
                       textTheme: TextTheme(
-                        titleMedium: theme.textTheme.titleMedium?.copyWith(
+                        bodyLarge: theme.textTheme.bodyLarge?.copyWith(
+                          decoration: TextDecoration.none,
                           color: !widget.enabled
-                              ? theme.textTheme.titleMedium?.color
-                                  ?.withOpacity(.6)
-                              : null,
+                              ? textColor?.withOpacity(.8)
+                              : textColor?.withOpacity(.38),
                         ),
                       ),
                       colorScheme: Theme.of(context).colorScheme.copyWith(
@@ -616,11 +719,6 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
                           ),
                     ),
                     child: TextFormField(
-                      style: widget.enabled
-                          ? null
-                          : TextStyle(
-                              color: theme.colorScheme.onSecondary,
-                            ),
                       textAlignVertical: TextAlignVertical.top,
                       minLines: null,
                       maxLines: null,
@@ -649,6 +747,7 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
                           widget.enableInteractiveSelection,
                       textInputAction: widget.textInputAction,
                       onFieldSubmitted: widget.onFieldSubmitted,
+                      cursorHeight: 22.0,
                     ),
                   ),
                 ),

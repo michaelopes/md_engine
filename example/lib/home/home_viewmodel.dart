@@ -9,12 +9,12 @@ class HomeViewModel extends MdViewModel {
   final map = MdMap<int, int>();
   final set = MdSet<int>({});
   @override
-  List<Object?> get observables {
+  List<MdStateObs> get observables {
     return [
-      counter,
-      counterObj,
-      map,
-      set,
+      () => counter,
+      () => counterObj,
+      () => map,
+      () => set,
     ];
   }
 
@@ -31,5 +31,5 @@ final class TestCounterObject extends MdStateObservable {
   //TestCounterObject(this.t);
 
   @override
-  List<Object?> get observables => [counter];
+  List<MdStateObs> get observables => [() => counter];
 }

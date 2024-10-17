@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../core/base/md_state.dart';
 import 'md_icon.dart';
 
+enum MdButtonIconType { suffix, prefix }
+
 class MdButton extends StatefulWidget {
   const MdButton({
     super.key,
@@ -14,6 +16,7 @@ class MdButton extends StatefulWidget {
     this.inLoading = false,
     this.height = 46,
     this.width,
+    this.iconType = MdButtonIconType.prefix,
   });
   final void Function()? onPressed;
   final Widget? icon;
@@ -23,6 +26,7 @@ class MdButton extends StatefulWidget {
   final ButtonStyle? style;
   final double height;
   final double? width;
+  final MdButtonIconType iconType;
   @override
   State<MdButton> createState() => _MdButtonState();
 }
@@ -50,8 +54,9 @@ class _MdButtonState extends MdState<MdButton> {
           )
         : Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (icon != null)
+              if (icon != null && widget.iconType == MdButtonIconType.prefix)
                 Padding(
                   padding: const EdgeInsets.only(right: 6),
                   child: icon,
@@ -61,7 +66,12 @@ class _MdButtonState extends MdState<MdButton> {
                 child: Text(
                   widget.text,
                 ),
-              )
+              ),
+              if (icon != null && widget.iconType == MdButtonIconType.suffix)
+                Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: icon,
+                ),
             ],
           );
   }

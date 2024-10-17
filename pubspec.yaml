@@ -16,7 +16,6 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   qlevar_router: ^1.11.2
   mask_text_input_formatter: ^2.9.0
-  flutter_secure_storage: ^9.2.2
   lottie: ^2.7.0
   flutter_svg: ^2.0.10+1
   uuid: ^4.2.2
@@ -33,21 +32,21 @@ dependencies:
   dropdown_button2: ^2.3.9
   universal_platform: ^1.1.0
   collection: ^1.17.2
+  json_store: ^2.0.1
+  encrypt_env: ^1.1.0
+  args: ^2.5.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+executables:
+  md_engine: bin/md_engine.dart
 
-# The following section is specific to Flutter packages.
 flutter:
-
-  # To add assets to your package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+   - lib/i18n/
   #   - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see

@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:example/home/home_view.dart';
 import 'package:example/settings/settings_view.dart';
 
 import 'package:md_engine/md_engine.dart';
 
-/*void main() {
+void main() {
   final routes = <QRoute>[
     QRoute(path: "/", builder: () => const HomeView()),
     QRoute(path: "/settings", builder: () => const SettingsView()),
@@ -20,23 +18,9 @@ import 'package:md_engine/md_engine.dart';
     ),
     routes: routes,
   );
+}
 
-  int value = 0;
-
-  MdObs test = value.obs();
-
-  Timer.periodic(const Duration(milliseconds: 100), (timer) {
-    if (test.hasChange) {
-      print("TEVE MUDANÇA");
-    }
-  });
-
-  Future.delayed(const Duration(seconds: 1), () {
-    value = 2;
-  });
-}*/
-
-void main() {
+/*void main() {
   int value = 0;
 
   MdObs test = value.obs();
@@ -59,7 +43,7 @@ extension IntObsExt on int {
       checker: () => this,
     );
   }
-}
+}*/
 
 class MdObs {
   late Object? snapshot;

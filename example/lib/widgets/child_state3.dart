@@ -32,5 +32,5 @@ class _ChildState3State extends MdWidgetState<ChildState3> {
   }
 
   @override
-  List<Object?> get observables => [counter];
+  List<MdStateObs> get observables => [() => counter];
 }

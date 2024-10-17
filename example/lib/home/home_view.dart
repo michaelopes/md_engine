@@ -15,11 +15,9 @@ class _HomeViewState extends MdViewModelState<HomeView, HomeViewModel> {
 
   @override
   void initState() {
-    print("stateView $hashCode");
     super.initState();
   }
 
-  final _cou = ValueNotifier(0);
   int _cou2 = 0;
 
   bool remove = false;

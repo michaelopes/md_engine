@@ -9,11 +9,11 @@ class SettingsViewModel extends MdViewModel {
   final map = MdMap<int, int>();
   final set = MdSet<int>({});
   @override
-  List<Object?> get observables => [
-        counter,
-        counterObj,
-        map,
-        set,
+  List<MdStateObs> get observables => [
+        () => counter,
+        () => counterObj,
+        () => map,
+        () => set,
       ];
 
   @override
@@ -29,5 +29,5 @@ final class TestCounterObject extends MdStateObservable {
   //TestCounterObject(this.t);
 
   @override
-  List<Object?> get observables => [counter];
+  List<MdStateObs> get observables => [() => counter];
 }

@@ -6,3 +6,5 @@ typedef WidgetBuilderArgs = Widget Function(
 );
 
 typedef ErrorListenerDisposer = void Function();
+
+typedef MdStateObs = Object? Function();
