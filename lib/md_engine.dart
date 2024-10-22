@@ -41,6 +41,8 @@ export './src/core/helpers/md_state_observable.dart';
 export 'src/core/util/md_typedefs.dart';
 export 'src/core/util/md_extensions.dart';
 export 'src/core/util/md_toolkit.dart';
+export 'src/core/util/md_failures.dart';
+export 'src/core/util/md_sub_route.dart';
 
 export 'src/core/viewmodel/md_viewmodel.dart';
 export 'src/core/viewmodel/md_viewmodel_state.dart';
@@ -59,6 +61,9 @@ export 'src/collections/md_set.dart';
 
 export 'src/core/util/md_asset_icon.dart';
 export 'src/core/util/md_asset_image.dart';
+
+export 'src/core/validator/md_field_validator.dart';
+export 'src/core/validator/md_validator.dart';
 
 export 'src/widgets/md_appbar.dart';
 export 'src/widgets/md_binary_check.dart';
@@ -92,3 +97,5 @@ export 'src/widgets/md_text_form_field.dart';
 export 'src/widgets/md_title.dart';
 export 'src/widgets/md_width.dart';
 export 'src/widgets/md_clock.dart';
+export 'src/widgets/md_3d_drawer.dart';
+export 'src/widgets/md_drawer.dart';

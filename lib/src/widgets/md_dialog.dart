@@ -14,7 +14,7 @@ class MdDialog extends StatefulWidget {
   final String? buttonSecondaryText;
   final Widget? header;
   final Widget? body;
-  final double? bodyMarginBottom;
+  final double? marginBottom;
 
   const MdDialog({
     super.key,
@@ -26,7 +26,7 @@ class MdDialog extends StatefulWidget {
     this.header,
     this.buttonSecondaryText,
     this.body,
-    this.bodyMarginBottom = 32,
+    this.marginBottom = 32,
   });
 
   @override
@@ -43,7 +43,12 @@ class MdDialog extends StatefulWidget {
       builder: (_) => this,
       barrierDismissible: barrierDismissible,
       useSafeArea: useSafeArea,
-      barrierColor: barrierColor,
+      barrierColor: barrierColor ??
+          MdToolkit.I
+              .getColorInverted(
+                Theme.of(context).colorScheme.background,
+              )
+              .withOpacity(.35),
     );
   }
 }
@@ -53,82 +58,89 @@ class _MdDialogState extends MdState<MdDialog> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: Center(
-          child: Container(
-            padding:
-                const EdgeInsets.only(top: 30, left: 24, right: 24, bottom: 24),
-            decoration: BoxDecoration(
-              color: theme.dialogTheme.backgroundColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
+      child: UnconstrainedBox(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 350,
+          ),
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (widget.header != null) ...[
-                  widget.header!,
-                  const MdHeight(16)
-                ],
-                if (widget.title.isNotEmpty) ...[
-                  Text(
-                    widget.title,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.titleLarge,
+            backgroundColor: theme.dialogTheme.backgroundColor,
+            elevation: 0,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.only(
+                    top: 30, left: 24, right: 24, bottom: 24),
+                decoration: BoxDecoration(
+                  color: theme.dialogTheme.backgroundColor,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(8),
                   ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                ],
-                if (widget.message.isNotEmpty)
-                  Text(
-                    widget.message,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                if (widget.body != null) widget.body!,
-                SizedBox(
-                  height: widget.bodyMarginBottom,
                 ),
-                if (widget.buttonText.isNotEmpty)
-                  MdButton(
-                    height: 42,
-                    width: 184,
-                    text: widget.buttonText,
-                    onPressed: widget.onTap,
-                  ),
-                widget.buttonSecondaryText != null
-                    ? Column(
-                        children: [
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          TextButton(
-                            onPressed: widget.onSecondaryTap,
-                            child: Text(
-                              widget.buttonSecondaryText!,
-                              style: theme.textTheme.labelLarge?.copyWith(
-                                  color: MdToolkit.I.getColorInverted(
-                                theme.dialogTheme.backgroundColor ??
-                                    Colors.black,
-                              )),
-                            ),
-                          ),
-                        ],
-                      )
-                    : Container(),
-                const SizedBox(
-                  height: 0,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (widget.header != null) ...[
+                      widget.header!,
+                      const MdHeight(16)
+                    ],
+                    if (widget.title.isNotEmpty) ...[
+                      Text(
+                        widget.title,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.titleLarge,
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                    ],
+                    if (widget.message.isNotEmpty)
+                      Text(
+                        widget.message,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                    if (widget.body != null) widget.body!,
+                    SizedBox(
+                      height: widget.marginBottom,
+                    ),
+                    if (widget.buttonText.isNotEmpty)
+                      MdButton(
+                        height: 40,
+                        width: 184,
+                        text: widget.buttonText,
+                        onPressed: widget.onTap,
+                      ),
+                    widget.buttonSecondaryText != null
+                        ? Column(
+                            children: [
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              TextButton(
+                                onPressed: widget.onSecondaryTap,
+                                child: Text(
+                                  widget.buttonSecondaryText!,
+                                  style: theme.textTheme.labelLarge?.copyWith(
+                                      color: MdToolkit.I.getColorInverted(
+                                    theme.dialogTheme.backgroundColor ??
+                                        Colors.black,
+                                  )),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    const SizedBox(
+                      height: 0,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

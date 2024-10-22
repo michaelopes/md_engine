@@ -7,7 +7,7 @@ import '../core/base/md_state.dart';
 import '../core/util/md_debouncer.dart';
 
 class MdTextAreaFormField extends MdTextFormField {
-  const MdTextAreaFormField({
+  MdTextAreaFormField({
     super.key,
     super.wdKey,
     super.inputFormatters,
@@ -70,7 +70,7 @@ class MdTextFormField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final Widget? prefixIcon;
   final FocusNode? focusNode;
-  final Key? wdKey;
+
   final List<TextInputFormatter>? inputFormatters;
   final bool topLabel;
   final int lines;
@@ -85,9 +85,11 @@ class MdTextFormField extends StatefulWidget {
   final VoidCallback? onClearTap;
   final Color? outlineBorderColor;
 
-  const MdTextFormField({
-    super.key,
-    this.wdKey,
+  late final Key? wdKey;
+
+  MdTextFormField({
+    Key? key,
+    Key? wdKey,
     this.inputFormatters,
     this.helperText,
     this.hintText,
@@ -118,12 +120,15 @@ class MdTextFormField extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     this.textCleaner = false,
     this.expandedHeight = 156,
-  }) : assert(
-          textCleaner && controller != null ||
-              !textCleaner && controller == null ||
-              !textCleaner && controller != null,
-          "Need a controller to use with textCleaner",
-        );
+  }) : super(key: key) {
+    assert(
+      textCleaner && controller != null ||
+          !textCleaner && controller == null ||
+          !textCleaner && controller != null,
+      "Need a controller to use with textCleaner",
+    );
+    this.wdKey = wdKey ?? UniqueKey();
+  }
 
   @override
   State<MdTextFormField> createState() =>
@@ -149,14 +154,15 @@ class _MdTextFormFieldState extends MdState<MdTextFormField> {
       helperText: widget.helperText,
       labelText: widget.topLabel ? null : widget.labelText,
       fillColor: widget.fillColor,
-      labelStyle: theme.inputDecorationTheme.labelStyle,
+      labelStyle: theme.inputDecorationTheme.labelStyle?.copyWith(height: 1) ??
+          const TextStyle(height: 1),
       hintStyle: theme.inputDecorationTheme.hintStyle,
       border: theme.inputDecorationTheme.border,
       enabledBorder: theme.inputDecorationTheme.enabledBorder,
       errorBorder: theme.inputDecorationTheme.errorBorder,
       focusedBorder: theme.inputDecorationTheme.focusedBorder,
       disabledBorder: theme.inputDecorationTheme.disabledBorder,
-      errorStyle: theme.inputDecorationTheme.errorStyle,
+      errorStyle: const TextStyle(height: 0),
       hoverColor: Colors.transparent,
     );
   }
@@ -315,7 +321,6 @@ class _MdTextFormFieldState extends MdState<MdTextFormField> {
           enableInteractiveSelection: widget.enableInteractiveSelection,
           textInputAction: widget.textInputAction,
           onFieldSubmitted: widget.onFieldSubmitted,
-          cursorHeight: 14.0,
         ),
       ],
     );
@@ -374,7 +379,10 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
   @override
   InputDecoration get _inputDecoration {
     return _baseInputDecoration.copyWith(
-      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+      contentPadding:
+          const EdgeInsets.symmetric(vertical: 0, horizontal: 12).copyWith(
+        top: 4,
+      ),
       focusedBorder: const OutlineInputBorder(
         borderSide: BorderSide(
           color: Colors.transparent,
@@ -446,14 +454,13 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
         ? MdToolkit.I.getColorInverted(theme.inputDecorationTheme.fillColor!)
         : null;
 
-    print(_errorMessage);
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height: 52,
+            height: 54,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: _bgColor,
@@ -484,56 +491,57 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
               children: [
                 if (_prefixIcon != null) _prefixIcon!,
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: _withCustomPadding ? 12 : 8,
-                      bottom: _withCustomPadding ? 0 : 8,
-                    ),
-                    child: Theme(
-                      data: Theme.of(context).copyWith(
-                        textTheme: TextTheme(
-                          bodyLarge: theme.textTheme.bodyLarge?.copyWith(
-                            decoration: TextDecoration.none,
-                            color: !widget.enabled
-                                ? textColor?.withOpacity(.95)
-                                : textColor?.withOpacity(.6),
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: _withCustomPadding ? 9 : 4,
+                        bottom: _withCustomPadding ? 0 : 4,
+                      ),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          textTheme: TextTheme(
+                            bodyLarge: theme.textTheme.bodyLarge?.copyWith(
+                              decoration: TextDecoration.none,
+                              color: !widget.enabled
+                                  ? textColor?.withOpacity(.95)
+                                  : textColor?.withOpacity(.6),
+                            ),
                           ),
                         ),
-                        colorScheme: Theme.of(context).colorScheme.copyWith(
-                              error: _bgColor,
-                            ),
-                      ),
-                      child: TextFormField(
-                        style: theme.textTheme.bodyLarge,
-                        minLines: widget.lines,
-                        maxLines: widget.lines,
-                        maxLength: widget.maxLength,
-                        key: widget.wdKey,
-                        textCapitalization: widget.textCapitalization,
-                        inputFormatters: widget.inputFormatters,
-                        focusNode: _focusNode,
-                        decoration: _inputDecoration,
-                        validator: (value) {
-                          _validateField(value);
-                          return _errorMessage == null ? null : "";
-                        },
-                        obscureText: widget.obscureText && !_passwordVisibile,
-                        enabled: widget.enabled,
-                        onChanged: (value) {
-                          _checkShowCleaner();
-                          if (widget.validateOnType) {
-                            _deboucer.value = value;
-                          }
-                          widget.onChanged?.call(value);
-                        },
-                        controller: _controller,
-                        autofocus: widget.autoFocus,
-                        keyboardType: widget.keyboardType,
-                        enableInteractiveSelection:
-                            widget.enableInteractiveSelection,
-                        textInputAction: widget.textInputAction,
-                        onFieldSubmitted: widget.onFieldSubmitted,
-                        cursorHeight: 22.0,
+                        child: TextFormField(
+                          style: theme.textTheme.bodyLarge,
+                          textAlignVertical: TextAlignVertical.top,
+                          minLines: widget.lines,
+                          maxLines: widget.lines,
+                          maxLength: widget.maxLength,
+                          key: widget.wdKey,
+                          textCapitalization: widget.textCapitalization,
+                          inputFormatters: widget.inputFormatters,
+                          focusNode: _focusNode,
+                          decoration: _inputDecoration,
+                          validator: (value) {
+                            _validateField(value);
+                            return _errorMessage == null ? null : "";
+                          },
+                          obscureText: widget.obscureText && !_passwordVisibile,
+                          enabled: widget.enabled,
+                          onChanged: (value) {
+                            _checkShowCleaner();
+                            if (widget.validateOnType) {
+                              _deboucer.value = value;
+                            }
+                            widget.onChanged?.call(value);
+                          },
+                          controller: _controller,
+                          autofocus: widget.autoFocus,
+                          keyboardType: widget.keyboardType,
+                          enableInteractiveSelection:
+                              widget.enableInteractiveSelection,
+                          textInputAction: widget.textInputAction,
+                          onFieldSubmitted: widget.onFieldSubmitted,
+                          // cursorHeight: 16.0,
+                          //cursorWidth: 2,
+                        ),
                       ),
                     ),
                   ),
@@ -546,7 +554,7 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
             Row(
               children: [
                 const SizedBox(
-                  height: 8,
+                  height: 2,
                 ),
                 SizedBox(
                   height: 22,
@@ -556,9 +564,6 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
                     size: 12,
                     color: theme.inputDecorationTheme.errorStyle?.color,
                   ),
-                ),
-                const SizedBox(
-                  width: 6,
                 ),
                 Expanded(
                   child: Text(
@@ -640,7 +645,8 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
       floatingLabelBehavior: FloatingLabelBehavior.always,
       floatingLabelStyle: theme.inputDecorationTheme.labelStyle,
       labelStyle: theme.inputDecorationTheme.labelStyle,
-      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12)
+          .copyWith(top: 4),
       label: widget.labelText != null
           ? Text(
               widget.labelText ?? "",
@@ -727,7 +733,6 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
                       key: widget.wdKey,
                       inputFormatters: widget.inputFormatters,
                       focusNode: _focusNode,
-                      decoration: _inputDecoration,
                       validator: (value) {
                         _validateField(value);
                         return _errorMessage == null ? null : "";
@@ -747,7 +752,6 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
                           widget.enableInteractiveSelection,
                       textInputAction: widget.textInputAction,
                       onFieldSubmitted: widget.onFieldSubmitted,
-                      cursorHeight: 22.0,
                     ),
                   ),
                 ),
@@ -758,7 +762,7 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
         ),
         if (_errorMessage != null) ...[
           const SizedBox(
-            height: 10,
+            height: 6,
           ),
           Row(
             children: [
@@ -766,9 +770,6 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
                 Icons.warning,
                 size: 12,
                 color: theme.inputDecorationTheme.errorStyle?.color,
-              ),
-              const SizedBox(
-                width: 10,
               ),
               Text(
                 _errorMessage ?? "",

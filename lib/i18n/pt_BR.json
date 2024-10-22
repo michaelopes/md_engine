@@ -71,6 +71,18 @@
         "message": "Parece que ainda não há resultados para exibir."
     },
     "shared": {
-        "search": "Pesquisar..."
+        "search": "Pesquisar...",
+        "attention": "Atenção!",
+        "i_understood": "Entendi",
+        "failure": {
+            "unexpected": {
+                "title": "Ops! Erro inesperado!",
+                "message": "Ocorreu um erro inesperado no aplicativo. Por favor, tente novamente ou entre em contato com nosso suporte."
+            },
+            "connection": {
+                "title": "Sem conexão!",
+                "message": "Não foi possível estabelecer uma conexão com a internet. Por favor, verifique sua conexão e tente novamente."
+            }
+        }
     }
 }

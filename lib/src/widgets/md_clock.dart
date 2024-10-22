@@ -15,12 +15,20 @@ class MdClock extends StatefulWidget {
 class _MdClockState extends MdWidgetState<MdClock> {
   DateTime _currentDateTime = DateTime.now();
 
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _currentDateTime = DateTime.now();
     });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override

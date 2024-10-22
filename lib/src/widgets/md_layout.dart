@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../core/helpers/md_responsive_metrics.dart';
@@ -50,7 +51,6 @@ class _MdLayoutState extends State<MdLayout> {
   @override
   Widget build(BuildContext context) {
     var metrics = MdResponsiveMetrics.of(context);
-
     Widget result;
     if (metrics.isXL) {
       result = widget.xl(context, metrics.size);

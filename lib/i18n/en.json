@@ -71,6 +71,18 @@
         "message": "It seems there are no results to display yet."
     },
     "shared": {
-        "search": "Search..."
+        "search": "Search...",
+        "i_understood": "I understood",
+        "attention": "Attention!",
+        "failure": {
+            "unexpected": {
+                "title": "Oops! Unexpected Error!",
+                "message": "An unexpected error occurred in the application. Please try again or contact our support."
+            },
+            "connection": {
+                "title": "No Connection!",
+                "message": "Unable to establish an internet connection. Please check your connection and try again."
+            }
+        }
     }
 }

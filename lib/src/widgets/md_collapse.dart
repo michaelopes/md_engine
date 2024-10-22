@@ -13,12 +13,14 @@ class MdCollapse extends StatefulWidget {
     this.customTitle,
     this.backgroundColor,
     this.onBackgroundColor,
+    this.expanded = false,
   });
   final String? title;
   final Widget? customTitle;
   final Widget? child;
   final bool fixedDivider;
   final ExpandedChildBuilder? expandedChildBuilder;
+  final bool expanded;
 
   final Color? backgroundColor;
   final Color? onBackgroundColor;
@@ -35,6 +37,7 @@ class _MdCollapseState extends MdState<MdCollapse> {
   @override
   void initState() {
     child = widget.child ?? const SizedBox.shrink();
+    _expanded = widget.expanded;
     super.initState();
   }
 

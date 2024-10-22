@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:md_engine/md_engine.dart';
 
+import '../util/md_view_error_event.dart';
 import '../util/md_state_engine.dart';
 
 typedef GlobalCondFunc = bool Function();
@@ -12,8 +13,6 @@ abstract class MdViewModel {
   late int _changeHashCode = _generateRandomHashCode();
   State? _state;
   ErrorObject? error;
-
-  final _errorListeners = <VoidCallback>[];
 
   List<MdStateObs> get observables;
 
@@ -27,13 +26,21 @@ abstract class MdViewModel {
   }
 
   void _registerStateWatch() {
-    MdStateEngine.I.register(getState(), [
-      () => _changeHashCode,
-      ...observables,
-    ]);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final parentState =
+          (_state as State).context.findAncestorStateOfType<MdState>();
+      MdStateEngine.I.register(
+        getState(),
+        [
+          () => _changeHashCode,
+          ...observables,
+        ],
+        parentState: parentState,
+      );
+    });
   }
 
-  T getState<T extends State>() => _state as T;
+  T getState<T>() => _state as T;
 
   final _controllerLoadings = [
     LoadObject.hideLoad(),
@@ -51,9 +58,9 @@ abstract class MdViewModel {
 
   int _generateRandomHashCode() {
     Random random = Random();
-    int high = random.nextInt(1 << 16); // Parte alta
-    int low = random.nextInt(1 << 16); // Parte baixa
-    int combined = (high << 16) + low; // Combina as duas partes
+    int high = random.nextInt(1 << 16);
+    int low = random.nextInt(1 << 16);
+    int combined = (high << 16) + low;
     return combined;
   }
 
@@ -64,13 +71,7 @@ abstract class MdViewModel {
   void setLoading(bool status, {String key = "default"}) {
     var ld = _createOrGetLoaderByKey(key);
     ld.status = status;
-  }
-
-  ErrorListenerDisposer addErrorListener(VoidCallback listener) {
-    _errorListeners.add(listener);
-    return () {
-      _errorListeners.remove(listener);
-    };
+    _updateHash();
   }
 
   LoadObject _createOrGetLoaderByKey(String key, {bool status = false}) {
@@ -87,11 +88,7 @@ abstract class MdViewModel {
     }
   }
 
-  void setError(
-    Object error,
-    StackTrace stackTrace, {
-    GlobalCondFunc? globalCallFilter,
-  }) {
+  void setError(Object error, StackTrace stackTrace) {
     for (var item in _controllerLoadings) {
       item.status = false;
     }
@@ -99,12 +96,14 @@ abstract class MdViewModel {
       error: error,
       stackTrace: stackTrace,
     );
-    for (var listener in _errorListeners) {
-      listener();
+
+    final state = getState();
+
+    MdViewErrorEvent? onError;
+    if (state is MdViewModelState) {
+      onError = state.onError;
     }
-    if ((globalCallFilter?.call() ?? true)) {
-      GlobalErrorObserver.dispatch(error, stackTrace);
-    }
+    GlobalErrorObserver.dispatch(error, stackTrace, onError);
     if (changeStateOnError) {
       _updateHash();
     } else {

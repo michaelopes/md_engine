@@ -41,3 +41,7 @@ class MdHttpDriverServerBadResponseFailure extends MdFailure {
   String toString() =>
       'MdHttpDriverServerBadResponseFailure(code: $code, statusCode: $statusCode, data: $data)';
 }
+
+class MdHttpDriverNetworkFailure extends MdFailure {
+  MdHttpDriverNetworkFailure({String message = ""}) : super(message);
+}

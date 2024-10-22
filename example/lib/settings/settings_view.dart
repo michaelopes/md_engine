@@ -22,7 +22,6 @@ class _SettingsViewState
 
   @override
   void initState() {
-    print("stateView $hashCode");
     super.initState();
   }
 

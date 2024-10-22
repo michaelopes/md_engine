@@ -4,6 +4,10 @@ import 'package:flutter/foundation.dart';
 import '../util/md_failures.dart';
 
 abstract base class MdBaseHttpDriverResponseParser {
+  MdHttpDriverResponse noNetwork(MdHttpDriverResponse response) {
+    return response;
+  }
+
   MdHttpDriverResponse range100(MdHttpDriverResponse response) {
     return response;
   }
@@ -51,6 +55,14 @@ abstract base class MdBaseHttpDriverResponseParser {
             ),
           );
       }
+    } else if (error is MdHttpDriverNetworkFailure) {
+      return noNetwork(
+        MdHttpDriverResponse(
+          message: error.message,
+          statusCode: 0,
+          failure: error,
+        ),
+      );
     } else {
       return range200(
         MdHttpDriverResponse(

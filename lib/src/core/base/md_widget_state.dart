@@ -5,7 +5,7 @@ import '../util/md_state_engine.dart';
 
 abstract class MdWidgetState<TWidget extends StatefulWidget>
     extends MdState<TWidget> {
-  List<MdStateObs> get observables;
+  List<MdStateObs> get observables => [];
 
   late final MdState? _mdState;
 

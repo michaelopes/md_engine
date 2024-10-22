@@ -54,8 +54,9 @@ final class MdStateEngine {
     }
     final parentItem = parentState == null
         ? null
-        : _storage
-            .firstWhereOrNull((e) => e.state.hashCode == parentState.hashCode);
+        : _storage.firstWhereOrNull(
+            (e) => e.state.hashCode == parentState.hashCode,
+          );
     if (index == -1) {
       _storage.add(
         _MdStateEngineItem(

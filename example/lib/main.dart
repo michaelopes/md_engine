@@ -56,8 +56,6 @@ class MdObs {
   }
 
   bool get hasChange {
-    print("VALUE ${checker().hashCode}");
-
     final result = snapshot != checker();
     snapshot = checker();
     return result;

@@ -1,20 +1,12 @@
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get_it/get_it.dart';
+import 'package:md_engine/md_engine.dart';
 
 import 'package:md_engine/src/core/util/md_delegate.dart';
 import 'package:md_engine/src/core/util/md_state_engine.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:qlevar_router/qlevar_router.dart';
-import 'package:universal_platform/universal_platform.dart';
 
-import 'core/http_driver/md_dio_http_driver.dart';
-import 'core/http_driver/md_http_driver_interface.dart';
-import 'core/http_driver/md_http_driver_options.dart';
 import 'core/i18n/app_localizations_delegate.dart';
 import 'core/i18n/i18n.dart';
-import 'core/i18n/md_translate_options.dart';
 import 'core/util/md_screen_utility.dart';
 
 typedef AppStepCallback = Future<void> Function();
@@ -95,6 +87,7 @@ class MdApp {
     String? restorationScopeId,
     ScrollBehavior? scrollBehavior,
     bool enableProativeState = true,
+    ErrorStateObsListener? errorListener,
   }) async {
     await beforeEnsureInitialized?.call();
     WidgetsFlutterBinding.ensureInitialized();
@@ -109,7 +102,7 @@ class MdApp {
     }
 
     await _loadAppInfos();
-    httpDriverOptions = httpDriverOptions.copyWith(
+    this.httpDriverOptions = httpDriverOptions.copyWith(
       deviceId: deviceId,
       appName: appName,
       appVersion: packageInfo.version,
@@ -161,6 +154,7 @@ class MdApp {
         navigatorObservers: navigatorObservers,
         initRoutePath: initRoutePath,
         enableProativeState: enableProativeState,
+        errorListener: errorListener,
       ),
     );
     onComplete?.call();
@@ -204,6 +198,7 @@ class _MdApp extends StatefulWidget {
   final List<NavigatorObserver>? navigatorObservers;
   final String? initRoutePath;
   final bool enableProativeState;
+  final ErrorStateObsListener? errorListener;
 
   const _MdApp({
     required this.routes,
@@ -240,6 +235,7 @@ class _MdApp extends StatefulWidget {
     this.navigatorObservers,
     this.initRoutePath,
     this.enableProativeState = true,
+    this.errorListener,
   });
   @override
   State<_MdApp> createState() => __MdAppState();
@@ -251,6 +247,9 @@ class __MdAppState extends State<_MdApp> {
     super.initState();
     if (widget.enableProativeState) {
       MdStateEngine.I.start();
+    }
+    if (widget.errorListener != null) {
+      GlobalErrorObserver.listen = widget.errorListener!;
     }
   }
 

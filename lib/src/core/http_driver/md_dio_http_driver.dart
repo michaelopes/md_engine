@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:md_engine/src/core/util/md_failures.dart';
 import 'package:md_engine/src/md_app.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -56,7 +59,16 @@ class MdDioHttpDriver implements IMdHttpDriver {
       var response = await request.catchError((e) => throw e);
       return MdApp.I.httpDriverOptions.responseParser.success(response);
     } on DioException catch (e) {
-      return MdApp.I.httpDriverOptions.responseParser.error(e);
+      Exception error = e;
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.sendTimeout ||
+          e.error is SocketException) {
+        error = MdHttpDriverNetworkFailure(message: e.message ?? "");
+      }
+
+      return MdApp.I.httpDriverOptions.responseParser.error(error);
     }
   }
 
