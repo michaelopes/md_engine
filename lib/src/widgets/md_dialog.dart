@@ -128,7 +128,7 @@ class _MdDialogState extends MdState<MdDialog> {
                                   style: theme.textTheme.labelLarge?.copyWith(
                                       color: MdToolkit.I.getColorInverted(
                                     theme.dialogTheme.backgroundColor ??
-                                        Colors.black,
+                                        theme.colorScheme.background,
                                   )),
                                 ),
                               ),

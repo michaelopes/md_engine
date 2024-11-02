@@ -18,4 +18,7 @@ typedef ErrorOnShowCallback = Future<bool> Function(
   Object error,
   StackTrace stackTrace,
 );
+
 typedef ErrorOnBackCallback = void Function(Object error);
+
+typedef MdTextFormater = String Function(num value);

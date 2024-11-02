@@ -6,6 +6,8 @@ import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../widgets/md_icon.dart';
+
 typedef WhenCondition = bool Function();
 
 enum ImageFailbackType { user, community, communityCover, none }
@@ -171,9 +173,15 @@ class MdToolkit {
     return format.format(DateTime.now());
   }
 
-  String formatMoney(double value) {
-    final formatedPrice = NumberFormat("#,##0.00", "pt_BR");
-    return formatedPrice.format(value);
+  String formatMoney(
+    double value, {
+    String simbol = "R\$",
+    String locale = "pt_BR",
+  }) {
+    final formatedPrice = NumberFormat("#,##0.00", locale);
+    return simbol.isNotEmpty
+        ? "$simbol ${formatedPrice.format(value)}"
+        : formatedPrice.format(value);
   }
 
   String brDatetime2IsoDate(
@@ -272,6 +280,30 @@ class MdToolkit {
             radix: 16) +
         0xFF000000;
     return result;
+  }
+
+  Widget tryChangeIconColor({
+    required Widget icon,
+    required Color targetColor,
+  }) {
+    if (icon is Icon) {
+      return Icon(
+        icon.icon,
+        size: icon.size,
+        fill: icon.fill,
+        grade: icon.grade,
+        weight: icon.weight,
+        opticalSize: icon.opticalSize,
+        semanticLabel: icon.semanticLabel,
+        shadows: icon.shadows,
+        color: targetColor,
+      );
+    } else if (icon is MdIcn) {
+      return icon.copyWith(
+        color: MdToolkit.I.getColorInverted(targetColor),
+      );
+    }
+    return icon;
   }
 
   Color getColorInverted(Color tColor) {

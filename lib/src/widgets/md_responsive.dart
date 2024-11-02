@@ -39,6 +39,15 @@ final class MdSpacing {
     this.lg = 0,
     this.xl = 0,
   });
+
+  factory MdSpacing.all(double value) {
+    return MdSpacing(
+      lg: value,
+      md: value,
+      sm: value,
+      xl: value,
+    );
+  }
 }
 
 final class MdSizeMacro {
@@ -59,11 +68,13 @@ class MdRow extends StatefulWidget {
     required this.children,
     this.mainAxisSpacing,
     this.crossAxisSpacing,
+    this.expanted = false,
   });
 
   final List<MdCol> children;
   final MdSpacing? mainAxisSpacing;
   final MdSpacing? crossAxisSpacing;
+  final bool expanted;
 
   @override
   State<MdRow> createState() => _MdRowState();
@@ -76,23 +87,26 @@ class _MdRowState extends State<MdRow> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, constraints) {
       final screenWidth = MdScreenUtility.I.width;
-      return SizedBox.expand(
-        child: Wrap(
-          direction: Axis.horizontal,
-          alignment: WrapAlignment.center,
-          children: widget.children.map((e) {
-            var isLast = widget.children.last == e;
-            return e._calculatedWidget(
-              parentWidth: constraints.maxWidth,
-              screenWidth: screenWidth,
-              crossAxisSpacing: _crossAxisSpacing,
-              mainAxisSpacing: _mainAxisSpacing,
-              maxHeight: constraints.maxHeight,
-              isLast: isLast,
-            );
-          }).toList(),
-        ),
+      final wrap = Wrap(
+        direction: Axis.horizontal,
+        alignment: WrapAlignment.start,
+        children: widget.children.map((e) {
+          var isLast = widget.children.last == e;
+          return e._calculatedWidget(
+            parentWidth: constraints.maxWidth,
+            screenWidth: screenWidth,
+            crossAxisSpacing: _crossAxisSpacing,
+            mainAxisSpacing: _mainAxisSpacing,
+            maxHeight: constraints.maxHeight,
+            isLast: isLast,
+          );
+        }).toList(),
       );
+      return widget.expanted
+          ? SizedBox.expand(
+              child: wrap,
+            )
+          : wrap;
     });
   }
 }
@@ -178,7 +192,7 @@ final class MdCol {
             ),
             child: Padding(
               padding: EdgeInsets.only(
-                right: isLast ? 0 : mainASpacing,
+                right: mainASpacing,
                 bottom: isLast ? 0 : crossASpacing,
               ),
               child: child,

@@ -126,7 +126,7 @@ class _MdAppBarState extends MdState<MdAppBar> {
               if (widget.actions.isNotEmpty)
                 Container(
                   height: size,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  //padding: const EdgeInsets.symmetric(horizontal: 16),
                   constraints: const BoxConstraints(
                     minWidth: size,
                   ),

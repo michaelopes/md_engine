@@ -21,9 +21,7 @@ export 'package:rx_notifier/rx_notifier.dart';
 export 'package:universal_platform/universal_platform.dart';
 export 'package:encrypt_env/encrypt_env.dart';
 
-export 'package:json_store/json_store.dart';
-// ignore: depend_on_referenced_packages
-export 'package:sqflite/sqflite.dart';
+export 'package:get_storage/get_storage.dart';
 
 export './src/md_app.dart';
 
@@ -43,6 +41,9 @@ export 'src/core/util/md_extensions.dart';
 export 'src/core/util/md_toolkit.dart';
 export 'src/core/util/md_failures.dart';
 export 'src/core/util/md_sub_route.dart';
+export 'src/core/util/md_secure_storage.dart';
+export 'src/core/util/md_masks.dart';
+export 'src/core/util/md_view_error_event.dart';
 
 export 'src/core/viewmodel/md_viewmodel.dart';
 export 'src/core/viewmodel/md_viewmodel_state.dart';
@@ -99,3 +100,5 @@ export 'src/widgets/md_width.dart';
 export 'src/widgets/md_clock.dart';
 export 'src/widgets/md_3d_drawer.dart';
 export 'src/widgets/md_drawer.dart';
+export 'src/widgets/md_dashboard_card.dart';
+export 'src/widgets/md_counter_indicator.dart';
