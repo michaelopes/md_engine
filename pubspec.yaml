@@ -19,11 +19,11 @@ dependencies:
   lottie: ^2.7.0
   flutter_svg: ^2.0.10+1
   uuid: ^4.2.2
-  intl: any
+  intl: 0.18.1
   easy_mask: ^2.0.1
   auto_size_text: ^3.0.0
   infinite_scroll_pagination: ^4.0.0
-  paged_datatable: ^2.1.1
+  paged_datatable: ^1.4.4
   diacritic: ^0.1.5
   get_it: ^8.0.0
   device_info_plus: ^9.1.2
@@ -36,7 +36,6 @@ dependencies:
   args: ^2.5.0
   encrypt: ^5.0.3
   get_storage: ^2.1.1
-
 
 dev_dependencies:
   flutter_test:
