@@ -113,7 +113,7 @@ class MdHttpDriverResponse {
 
   Object makeFailure() {
     if (_failure != null) {
-      return _failure!;
+      return _failure;
     } else {
       if (statusCode >= 400 && statusCode < 500) {
         return MdHttpDriverServerBadResponseFailure(
