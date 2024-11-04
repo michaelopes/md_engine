@@ -70,6 +70,24 @@
         "title": "Nenhum resultado",
         "message": "Parece que ainda não há resultados para exibir."
     },
+    "datatable": {
+        "show_filter_menu_tooltip": "Filtro",
+        "filter_by_title": "Filtrar por",
+        "apply_filter_button_text": "Aplicar",
+        "cancel_filtering_button_text": "Cancelar",
+        "remove_all_filters_button_text": "Remover",
+        "editable_column_save_changes_button_text": "Salvar alterações",
+        "editable_column_cancel_button_text": "Cancelar",
+        "remove_filter_button_text": "Remover este filtro",
+        "refresh_text": "Atualizar",
+        "refreshed_at_text": "Última atualização às {{p1}}",
+        "rows_per_page_text": "Linhas por página",
+        "page_indicator_text": "Página {{p1}}",
+        "total_elements_text": "Mostrando {{p1}} elementos",
+        "next_page_button_text": "Próxima página",
+        "previous_page_button_text": "Página anterior",
+        "no_items_found_text": "Nenhum item encontrado"
+    },
     "shared": {
         "search": "Pesquisar...",
         "attention": "Atenção!",

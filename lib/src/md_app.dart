@@ -5,7 +5,8 @@ import 'package:md_engine/md_engine.dart';
 import 'package:md_engine/src/core/util/md_delegate.dart';
 import 'package:md_engine/src/core/util/md_state_engine.dart';
 
-import 'core/i18n/app_localizations_delegate.dart';
+import 'core/i18n/app_data_table_custom_localization.dart';
+import 'core/i18n/app_localizations.dart';
 import 'core/i18n/i18n.dart';
 import 'core/util/md_screen_utility.dart';
 
@@ -305,7 +306,8 @@ class __MdAppState extends State<_MdApp> {
           widget.enableI18n ? I18n.I.localeResolutionCallback : null,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
-        if (widget.enableI18n) AppLocalizationsDelegate(),
+        if (widget.enableI18n) AppLocalizations.delegate,
+        AppDataTableCustomLocalization.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

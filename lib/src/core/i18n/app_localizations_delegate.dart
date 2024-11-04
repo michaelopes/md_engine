@@ -7,7 +7,7 @@ import 'app_localizations.dart';
 import 'i18n.dart';
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
-  AppLocalizationsDelegate();
+  const AppLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) {

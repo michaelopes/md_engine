@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_localizations_delegate.dart';
 import 'nested_json_parser.dart';
 
 class AppLocalizations {
@@ -7,6 +8,8 @@ class AppLocalizations {
 
   final Map<String, Map<String, dynamic>>? localizedValues;
   final Locale locale;
+
+  static const delegate = AppLocalizationsDelegate();
 
   static AppLocalizations? of(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
