@@ -15,6 +15,9 @@ final class MdRouteConfig {
       this.path = "/$name";
     }
   }
+
+  String get fullPath =>
+      _rootConfig != null ? "${_rootConfig!.path}$path" : path;
 }
 
 final class MdRoute {
