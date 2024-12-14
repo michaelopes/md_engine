@@ -12,7 +12,6 @@ export 'package:intl/intl.dart';
 export 'package:easy_mask/easy_mask.dart';
 export 'package:auto_size_text/auto_size_text.dart';
 export 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-export 'package:paged_datatable/paged_datatable.dart';
 export 'package:diacritic/diacritic.dart';
 export 'package:get_it/get_it.dart';
 export 'package:device_info_plus/device_info_plus.dart';
@@ -20,7 +19,7 @@ export 'package:package_info_plus/package_info_plus.dart';
 export 'package:rx_notifier/rx_notifier.dart';
 export 'package:universal_platform/universal_platform.dart';
 export 'package:encrypt_env/encrypt_env.dart';
-
+export 'package:operance_datatable/operance_datatable.dart';
 export 'package:get_storage/get_storage.dart';
 
 export './src/md_app.dart';
@@ -102,3 +101,45 @@ export 'src/widgets/md_3d_drawer.dart';
 export 'src/widgets/md_drawer.dart';
 export 'src/widgets/md_dashboard_card.dart';
 export 'src/widgets/md_counter_indicator.dart';
+
+import 'package:flutter/material.dart';
+import 'package:md_engine/src/core/i18n/app_translate.dart';
+import 'package:operance_datatable/operance_datatable.dart';
+import 'package:qlevar_router/qlevar_router.dart';
+
+OperanceDataDecoration? _kDefaultDataTableDecoration;
+
+OperanceDataDecoration get kDefaultDataTableDecoration {
+  _kDefaultDataTableDecoration ??= OperanceDataDecoration(
+    colors: OperanceDataColors(
+      rowColor: Theme.of(QR.context!).scaffoldBackgroundColor,
+      rowHoverColor: Theme.of(QR.context!).primaryColor.withOpacity(.2),
+    ),
+    icons: OperanceDataIcons(
+      columnHeaderSortAscendingIcon: Icons.arrow_upward,
+      columnHeaderSortDescendingIcon: Icons.arrow_downward,
+    ),
+    sizes: OperanceDataSizes(
+      headerHeight: 60.0,
+      rowHeight: 44.0,
+    ),
+    styles: OperanceDataStyles(
+      footerDecoration: BoxDecoration(),
+      searchDecoration: InputDecoration(
+          hintText: AppTranslate.tr("shared.search", QR.context!),
+          prefixIcon: Icon(
+            Icons.search,
+            color: Theme.of(QR.context!).primaryColor,
+          ),
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6)),
+    ),
+    ui: OperanceDataUI(
+      animationDuration: 300,
+      rowsPerPageOptions: [20, 40, 80, 120],
+      searchPosition: SearchPosition.left,
+      rowsPerPageText: AppTranslate.tr("shared.rows_per_page", QR.context!),
+    ),
+  );
+  return _kDefaultDataTableDecoration!;
+}

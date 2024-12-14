@@ -72,6 +72,7 @@
     },
     "shared": {
         "search": "Buscar...",
+        "rows_per_page": "Filas por página",
         "attention": "¡Atención!",
         "i_understood": "Entendido",
         "failure": {

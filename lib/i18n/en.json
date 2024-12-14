@@ -72,6 +72,7 @@
     },
     "shared": {
         "search": "Search...",
+        "rows_per_page": "Rows per page",
         "i_understood": "I understood",
         "attention": "Attention!",
         "failure": {

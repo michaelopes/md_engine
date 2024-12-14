@@ -14,8 +14,8 @@ extension StringTrExt on String {
   }
 }
 
-extension ListMdSubRouteExt on List<MdSubRoute> {
-  MdSubRoute byName(String name) {
-    return where((e) => e.name == name).first;
+extension ListMdSubRouteExt on List<MdRoute> {
+  MdRoute byName(String name) {
+    return where((e) => e.config.name == name).first;
   }
 }

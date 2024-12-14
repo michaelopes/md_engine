@@ -3,19 +3,31 @@ import 'package:md_engine/md_engine.dart';
 
 import '../../widgets/md_sub_route_builder.dart';
 
-class MdSubRoute {
-  final String path;
+final class MdRouteConfig {
+  late final String path;
   final String name;
+
+  // ignore: unused_field
+  MdRouteConfig? _rootConfig;
+
+  MdRouteConfig({String path = "", this.name = ""}) {
+    if (path.isEmpty) {
+      this.path = "/$name";
+    }
+  }
+}
+
+final class MdRoute {
+  final MdRouteConfig config;
   final String transKey;
   final Widget icon;
   final Widget? activeIcon;
   Widget Function(QRouter? router)? builder;
-  final List<MdSubRoute> children;
+  final List<MdRoute> children;
 
-  MdSubRoute({
-    required this.path,
-    required this.name,
-    required this.transKey,
+  MdRoute({
+    required this.config,
+    this.transKey = "",
     this.builder,
     this.icon = const SizedBox.shrink(),
     this.activeIcon,
@@ -29,28 +41,33 @@ class MdSubRoute {
     return icon;
   }
 
+  MdRoute _setRootConfig(MdRouteConfig rootConfig) {
+    config._rootConfig = rootConfig;
+    return this;
+  }
+
   QRoute toQRRoute({
     List<QMiddleware>? middleware,
   }) {
     if (children.isNotEmpty) {
       return QRoute.withChild(
-        name: name,
-        path: path,
-        initRoute: children.first.path,
+        name: config.name,
+        path: config.path,
+        initRoute: children.first.config.path,
         builderChild: (router) {
           return builder?.call(router) ?? MdSubRouteBuilder(router: router);
         },
         middleware: middleware,
         children: children
             .map(
-              (e) => e.toQRRoute(),
+              (e) => e._setRootConfig(config).toQRRoute(),
             )
             .toList(),
       );
     } else {
       return QRoute(
-        path: path,
-        name: name,
+        name: config.name,
+        path: config.path,
         pageType: const QFadePage(),
         builder: () =>
             builder?.call(null) ??
