@@ -16,7 +16,7 @@ class GlobalErrorObserver {
     if (_listener != null) {
       if (viewError == null || !(await viewError.onShow(error, stackTrace))) {
         _listener!(error, stackTrace, (err) {
-          viewError?.onBack(err);
+          viewError?.onGlobalBack(err);
         });
       }
     }
