@@ -2,10 +2,10 @@ import 'package:md_engine/src/core/util/md_typedefs.dart';
 
 final class MdViewErrorEvent {
   final ErrorOnShowCallback onShow;
-  final ErrorOnBackCallback onBack;
+  final ErrorOnBackCallback onGlobalBack;
 
   MdViewErrorEvent({
     required this.onShow,
-    required this.onBack,
+    required this.onGlobalBack,
   });
 }
