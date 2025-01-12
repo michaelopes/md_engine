@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:md_engine/md_engine.dart';
 
-import '../util/md_view_error_event.dart';
 import '../util/md_state_engine.dart';
 
 typedef GlobalCondFunc = bool Function();
@@ -15,6 +14,8 @@ abstract class MdViewModel {
   ErrorObject? error;
 
   List<MdStateObs> get observables;
+
+  String _obsRegisterKey = "";
 
   setState<T extends State>(T state) {
     _state = state;
@@ -27,15 +28,14 @@ abstract class MdViewModel {
 
   void _registerStateWatch() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final parentState =
-          (_state as State).context.findAncestorStateOfType<MdState>();
-      MdStateEngine.I.register(
+      _obsRegisterKey = MdStateEngine.I.register(
         getState(),
         [
-          () => _changeHashCode,
+          () {
+            return _changeHashCode;
+          },
           ...observables,
         ],
-        parentState: parentState,
       );
     });
   }
@@ -52,7 +52,7 @@ abstract class MdViewModel {
 
   @mustCallSuper
   void dispose() {
-    MdStateEngine.I.removeByState(getState());
+    MdStateEngine.I.removeByKey(_obsRegisterKey);
     _controllerLoadings.clear();
   }
 

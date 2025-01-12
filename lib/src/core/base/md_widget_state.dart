@@ -7,11 +7,10 @@ abstract class MdWidgetState<TWidget extends StatefulWidget>
     extends MdState<TWidget> {
   List<MdStateObs> get observables => [];
 
-  late final MdState? _mdState;
+  String _obsRegisterKey = "";
 
   @override
   void initState() {
-    _mdState = context.findAncestorStateOfType<MdState>();
     _registerStateWatch();
     super.initState();
   }
@@ -23,12 +22,12 @@ abstract class MdWidgetState<TWidget extends StatefulWidget>
   }
 
   void _registerStateWatch() {
-    MdStateEngine.I.register(this, observables, parentState: _mdState!);
+    _obsRegisterKey = MdStateEngine.I.register(this, observables);
   }
 
   @override
   void dispose() {
-    MdStateEngine.I.removeByState(this);
+    MdStateEngine.I.removeByKey(_obsRegisterKey);
     super.dispose();
   }
 }
