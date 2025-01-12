@@ -1,6 +1,5 @@
 import 'package:flutter/scheduler.dart';
 import 'package:md_engine/md_engine.dart';
-import 'package:collection/collection.dart';
 import 'package:md_engine/src/collections/md_collection.dart';
 
 final class MdStateObserver {
@@ -14,21 +13,22 @@ final class MdStateObserver {
   }
 
   bool get hasChange {
-    final result = snapshot != checker();
-    snapshot = checker();
+    final newValue = checker();
+    final result = snapshot != newValue;
+    snapshot = newValue;
     return result;
   }
 }
 
 final class _MdStateEngineItem {
+  final String key;
   final MdState state;
-  final MdState? parentState;
   final List<MdStateObserver> observables;
 
   _MdStateEngineItem({
+    required this.key,
     required this.state,
     required this.observables,
-    this.parentState,
   });
 
   bool get hasChange => observables.any((e) => e.hasChange);
@@ -40,41 +40,28 @@ final class MdStateEngine {
   static final I = MdStateEngine._internal();
   final _storage = <_MdStateEngineItem>[];
 
+  final _executeControl = _ChangeExecuteControl();
+
   Ticker? _ticker;
 
-  void register(
+  String register(
     MdState state,
-    List<MdStateObs> observables, {
-    MdState? parentState,
-  }) {
+    List<MdStateObs> observables,
+  ) {
     final index =
         _storage.indexWhere((e) => e.state.hashCode == state.hashCode);
     if (index >= 0) {
       _storage.removeAt(index);
     }
-    final parentItem = parentState == null
-        ? null
-        : _storage.firstWhereOrNull(
-            (e) => e.state.hashCode == parentState.hashCode,
-          );
-    if (index == -1) {
-      _storage.add(
-        _MdStateEngineItem(
-          observables: _processObservers(observables),
-          state: state,
-          parentState: parentItem?.parentState ?? parentState,
-        ),
-      );
-    } else {
-      _storage.insert(
-        index,
-        _MdStateEngineItem(
-          observables: _processObservers(observables),
-          state: state,
-          parentState: parentItem?.parentState ?? parentState,
-        ),
-      );
-    }
+    final key = Uuid().v4();
+    _storage.add(
+      _MdStateEngineItem(
+        key: key,
+        observables: _processObservers(observables),
+        state: state,
+      ),
+    );
+    return key;
   }
 
   List<MdStateObserver> _processObservers(List<MdStateObs> observables) {
@@ -91,13 +78,9 @@ final class MdStateEngine {
     return result;
   }
 
-  void removeByState(MdState state) {
-    _storage.removeWhere((e) => e.state.hashCode == state.hashCode);
-  }
-
-  _MdStateEngineItem? get _targetObserver {
-    if (_storage.isEmpty) return null;
-    return _storage.where((e) => e.parentState == null).last;
+  void removeByKey(String key) {
+    if (key.isEmpty) return;
+    _storage.removeWhere((e) => e.key == key);
   }
 
   void start() {
@@ -111,38 +94,39 @@ final class MdStateEngine {
     _ticker?.stop();
   }
 
-  _MdStateEngineItem? _checkAndGetChangedChildStateItem(
-      Iterable<_MdStateEngineItem> items,
-      {int index = 0}) {
-    if (items.isEmpty) return null;
-    if (items.elementAt(index).hasChange) {
-      return items.elementAt(index);
-    }
-    final newIndex = index + 1;
-    if (items.length - 1 >= newIndex) {
-      return _checkAndGetChangedChildStateItem(items, index: newIndex);
-    }
-    return null;
+  Iterable<_MdStateEngineItem> _getChangedItems() {
+    return _storage.where((e) => e.hasChange);
   }
 
   void _onTick(Duration elapsedTime) {
-    final target = _targetObserver;
-    if (target != null) {
-      if (target.hasChange) {
+    print("onTick");
+    _executeControl.execute(() {
+      final targets = _getChangedItems();
+      for (var target in targets) {
         target.state.notifyView();
-      } else {
-        final items = _storage.where(
-          (e) =>
-              e.parentState != null &&
-              e.parentState.hashCode == target.state.hashCode,
-        );
-        if (items.isNotEmpty) {
-          final item = _checkAndGetChangedChildStateItem(items);
-          if (item != null) {
-            item.state.notifyView();
-          }
-        }
       }
+    });
+  }
+}
+
+class _ChangeExecuteControl {
+  int _dControll = 0;
+
+  int get _getTime {
+    return DateTime.now().millisecondsSinceEpoch;
+  }
+
+  int get _getTimeDiff {
+    return _getTime - _dControll;
+  }
+
+  void execute(void Function() runner) {
+    if (_dControll == 0) {
+      _dControll = _getTime;
+      runner();
+    } else if (_getTimeDiff >= 16) {
+      _dControll = _getTime;
+      runner();
     }
   }
 }

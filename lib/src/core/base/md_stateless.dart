@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../i18n/fk_translate_processor.dart';
 
 abstract class MdStateless extends Widget {
-  MdStateless({Key? key}) : super(key: key);
+  MdStateless({super.key});
   final _contextMemStore = _ContextMemStore();
   dynamic get tr => FkTranslatorProcessor(context);
 
@@ -42,12 +42,4 @@ final class MdWidgetElement extends ComponentElement {
     _widget._refreshContext(this);
     return _widget.build(this);
   }
-
-  /* @override
-  void update(MdStateless newWidget) {
-    refreshContext(this);
-    super.update(newWidget);
-    assert(widget == newWidget);
-    rebuild(force: true);
-  }*/
 }
