@@ -316,7 +316,7 @@ class __MdAppState extends State<_MdApp> {
   }
 }
 
-enum Flavor { prd, dev, hom, unknow }
+enum Flavor { prd, dev, hom, lcl, unknow }
 
 class F {
   static Flavor get appFlavor => MdApp.I.flavor;
@@ -330,6 +330,8 @@ class F {
         return 'Dev ${MdApp.I.appName}';
       case Flavor.hom:
         return 'Hom ${MdApp.I.appName}';
+      case Flavor.lcl:
+        return 'Lcl ${MdApp.I.appName}';
       default:
         return 'Dev ${MdApp.I.appName}';
     }

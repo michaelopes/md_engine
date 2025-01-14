@@ -5,7 +5,7 @@ import 'assets_commands_runner.dart';
 Future<void> main(List<String> args) async {
   final newArgs = [...args]
     ..remove("env")
-    ..remove("asset")
+    ..remove("assets")
     ..remove("all");
 
   final envArgs = [
@@ -20,7 +20,7 @@ Future<void> main(List<String> args) async {
 
   if (args.contains("env")) {
     await _flushThenExit(await EncryptEnvCommandRunner().run(envArgs));
-  } else if (args.contains("asset")) {
+  } else if (args.contains("assets")) {
     await AssetsCommandsRunner.run(newArgs);
   } else if (args.contains("all")) {
     await AssetsCommandsRunner.run(newArgs);

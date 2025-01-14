@@ -99,7 +99,6 @@ final class MdStateEngine {
   }
 
   void _onTick(Duration elapsedTime) {
-    print("onTick");
     _executeControl.execute(() {
       final targets = _getChangedItems();
       for (var target in targets) {
