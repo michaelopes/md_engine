@@ -4,6 +4,7 @@ export 'package:dio/dio.dart';
 export 'package:pretty_dio_logger/pretty_dio_logger.dart';
 export 'package:qlevar_router/qlevar_router.dart';
 export 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+export 'package:carousel_slider/carousel_slider.dart';
 
 export 'package:lottie/lottie.dart';
 export 'package:flutter_svg/flutter_svg.dart';
@@ -110,6 +111,8 @@ import 'package:operance_datatable/operance_datatable.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
 OperanceDataDecoration? _kDefaultDataTableDecoration;
+double kDefaultMdButtonHeight = 46;
+double kDefaultMdTextFormFieldHeight = 54;
 
 OperanceDataDecoration get kDefaultDataTableDecoration {
   _kDefaultDataTableDecoration ??= OperanceDataDecoration(

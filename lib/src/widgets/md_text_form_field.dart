@@ -1,9 +1,8 @@
 // ignore_for_file: no_logic_in_create_state
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:md_engine/src/core/util/md_toolkit.dart';
 
-import '../core/base/md_state.dart';
+import '../../md_engine.dart';
 import '../core/util/md_debouncer.dart';
 
 class MdTextAreaFormField extends MdTextFormField {
@@ -88,7 +87,7 @@ class MdTextFormField extends StatefulWidget {
   late final Key? wdKey;
 
   MdTextFormField({
-    Key? key,
+    super.key,
     Key? wdKey,
     this.inputFormatters,
     this.helperText,
@@ -120,7 +119,7 @@ class MdTextFormField extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     this.textCleaner = false,
     this.expandedHeight = 156,
-  }) : super(key: key) {
+  }) {
     assert(
       textCleaner && controller != null ||
           !textCleaner && controller == null ||
@@ -162,6 +161,7 @@ class _MdTextFormFieldState extends MdState<MdTextFormField> {
       errorBorder: theme.inputDecorationTheme.errorBorder,
       focusedBorder: theme.inputDecorationTheme.focusedBorder,
       disabledBorder: theme.inputDecorationTheme.disabledBorder,
+      focusedErrorBorder: theme.inputDecorationTheme.focusedErrorBorder,
       errorStyle: const TextStyle(height: 0),
       hoverColor: Colors.transparent,
     );
@@ -447,6 +447,127 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
     }
   }
 
+  BorderRadius get _borderRadius {
+    if (!widget.enabled) {
+      if (super._baseInputDecoration.disabledBorder?.isOutline ?? false) {
+        final b =
+            super._baseInputDecoration.disabledBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else if (_hasFocus && (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.focusedBorder?.isOutline ?? false) {
+        final b =
+            super._baseInputDecoration.focusedBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.enabledBorder?.isOutline ?? false) {
+        final b =
+            super._baseInputDecoration.enabledBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.errorBorder?.isOutline ?? false) {
+        final b = super._baseInputDecoration.errorBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else if (_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.focusedErrorBorder?.isOutline ?? false) {
+        final b =
+            super._baseInputDecoration.focusedErrorBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else {
+      if (super._baseInputDecoration.border?.isOutline ?? false) {
+        final b = super._baseInputDecoration.border as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    }
+
+    return BorderRadius.circular(4);
+  }
+
+  Color get _borderColor {
+    if (!widget.enabled) {
+      if (super._baseInputDecoration.disabledBorder != null) {
+        final b = super._baseInputDecoration.disabledBorder!;
+        return b.borderSide.color;
+      }
+    } else if (_hasFocus && (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.focusedBorder != null) {
+        final b = super._baseInputDecoration.focusedBorder!;
+        return b.borderSide.color;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.enabledBorder != null) {
+        final b = super._baseInputDecoration.enabledBorder!;
+        return b.borderSide.color;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.errorBorder != null) {
+        final b = super._baseInputDecoration.errorBorder!;
+        return b.borderSide.color;
+      }
+    } else if (_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.focusedErrorBorder != null) {
+        final b = super._baseInputDecoration.focusedErrorBorder!;
+        return b.borderSide.color;
+      }
+    } else {
+      if (super._baseInputDecoration.border != null) {
+        final b = super._baseInputDecoration.border!;
+        return b.borderSide.color;
+      }
+    }
+
+    return theme.colorScheme.primary;
+  }
+
+  double get _borderWidth {
+    if (!widget.enabled) {
+      if (super._baseInputDecoration.disabledBorder != null) {
+        final b = super._baseInputDecoration.disabledBorder!;
+        return b.borderSide.width;
+      }
+    } else if (_hasFocus && (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.focusedBorder != null) {
+        final b = super._baseInputDecoration.focusedBorder!;
+        return b.borderSide.width;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.enabledBorder != null) {
+        final b = super._baseInputDecoration.enabledBorder!;
+        return b.borderSide.width;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.errorBorder != null) {
+        final b = super._baseInputDecoration.errorBorder!;
+        return b.borderSide.width;
+      }
+    } else if (_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.focusedErrorBorder != null) {
+        final b = super._baseInputDecoration.focusedErrorBorder!;
+        return b.borderSide.width;
+      }
+    } else {
+      if (super._baseInputDecoration.border != null) {
+        final b = super._baseInputDecoration.border!;
+        return b.borderSide.width;
+      }
+    }
+
+    return 1;
+  }
+
   @override
   Widget build(BuildContext context) {
     final textColor = theme.inputDecorationTheme.fillColor != null &&
@@ -460,94 +581,81 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height: 54,
+            height: kDefaultMdTextFormFieldHeight,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: _bgColor,
-              borderRadius: BorderRadius.circular(4),
-              border: _hasFocus || _errorMessage != null
-                  ? Border.all(
-                      color: _errorMessage == null
-                          ? theme.inputDecorationTheme.focusedBorder?.borderSide
-                                  .color ??
-                              theme.colorScheme.primary
-                          : theme.inputDecorationTheme.errorBorder?.borderSide
-                                  .color ??
-                              theme.colorScheme.error,
-                      width: (_errorMessage != null
-                                  ? theme.inputDecorationTheme.errorBorder
-                                      ?.borderSide
-                                  : theme.inputDecorationTheme.focusedBorder
-                                      ?.borderSide)
-                              ?.width ??
-                          1,
-                    )
-                  : Border.all(
-                      color: theme.inputDecorationTheme.outlineBorder?.color ??
-                          (widget.outlineBorderColor ?? Colors.transparent),
-                    ),
+              borderRadius: _borderRadius,
+              border: Border.all(
+                color: _borderColor,
+                width: _borderWidth,
+              ),
             ),
-            child: Row(
-              children: [
-                if (_prefixIcon != null) _prefixIcon!,
-                Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: _withCustomPadding ? 9 : 4,
-                        bottom: _withCustomPadding ? 0 : 4,
-                      ),
-                      child: Theme(
-                        data: Theme.of(context).copyWith(
-                          textTheme: TextTheme(
-                            bodyLarge: theme.textTheme.bodyLarge?.copyWith(
-                              decoration: TextDecoration.none,
-                              color: !widget.enabled
-                                  ? textColor?.withOpacity(.95)
-                                  : textColor?.withOpacity(.6),
+            child: ClipRRect(
+              borderRadius: _borderRadius,
+              child: Row(
+                children: [
+                  if (_prefixIcon != null) _prefixIcon!,
+                  Expanded(
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: _withCustomPadding ? 9 : 4,
+                          bottom: _withCustomPadding ? 0 : 4,
+                        ),
+                        child: Theme(
+                          data: Theme.of(context).copyWith(
+                            textTheme: TextTheme(
+                              bodyLarge: theme.textTheme.bodyLarge?.copyWith(
+                                decoration: TextDecoration.none,
+                                color: !widget.enabled
+                                    ? textColor?.withOpacity(.95)
+                                    : textColor?.withOpacity(.6),
+                              ),
                             ),
                           ),
-                        ),
-                        child: TextFormField(
-                          style: theme.textTheme.bodyLarge,
-                          textAlignVertical: TextAlignVertical.top,
-                          minLines: widget.lines,
-                          maxLines: widget.lines,
-                          maxLength: widget.maxLength,
-                          key: widget.wdKey,
-                          textCapitalization: widget.textCapitalization,
-                          inputFormatters: widget.inputFormatters,
-                          focusNode: _focusNode,
-                          decoration: _inputDecoration,
-                          validator: (value) {
-                            _validateField(value);
-                            return _errorMessage == null ? null : "";
-                          },
-                          obscureText: widget.obscureText && !_passwordVisibile,
-                          enabled: widget.enabled,
-                          onChanged: (value) {
-                            _checkShowCleaner();
-                            if (widget.validateOnType) {
-                              _deboucer.value = value;
-                            }
-                            widget.onChanged?.call(value);
-                          },
-                          controller: _controller,
-                          autofocus: widget.autoFocus,
-                          keyboardType: widget.keyboardType,
-                          enableInteractiveSelection:
-                              widget.enableInteractiveSelection,
-                          textInputAction: widget.textInputAction,
-                          onFieldSubmitted: widget.onFieldSubmitted,
-                          // cursorHeight: 16.0,
-                          //cursorWidth: 2,
+                          child: TextFormField(
+                            style: theme.textTheme.bodyLarge,
+                            textAlignVertical: TextAlignVertical.top,
+                            minLines: widget.lines,
+                            maxLines: widget.lines,
+                            maxLength: widget.maxLength,
+                            key: widget.wdKey,
+                            textCapitalization: widget.textCapitalization,
+                            inputFormatters: widget.inputFormatters,
+                            focusNode: _focusNode,
+                            decoration: _inputDecoration,
+                            validator: (value) {
+                              _validateField(value);
+                              return _errorMessage == null ? null : "";
+                            },
+                            obscureText:
+                                widget.obscureText && !_passwordVisibile,
+                            enabled: widget.enabled,
+                            onChanged: (value) {
+                              _checkShowCleaner();
+                              if (widget.validateOnType) {
+                                _deboucer.value = value;
+                              }
+                              widget.onChanged?.call(value);
+                            },
+                            controller: _controller,
+                            autofocus: widget.autoFocus,
+                            keyboardType: widget.keyboardType,
+                            enableInteractiveSelection:
+                                widget.enableInteractiveSelection,
+                            textInputAction: widget.textInputAction,
+                            onFieldSubmitted: widget.onFieldSubmitted,
+                            // cursorHeight: 16.0,
+                            //cursorWidth: 2,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                if (_suffixIcon != null) _suffixIcon!
-              ],
+                  if (_suffixIcon != null) _suffixIcon!
+                ],
+              ),
             ),
           ),
           if (_errorMessage != null) ...[
@@ -659,6 +767,127 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
     );
   }
 
+  BorderRadius get _borderRadius {
+    if (!widget.enabled) {
+      if (super._baseInputDecoration.disabledBorder?.isOutline ?? false) {
+        final b =
+            super._baseInputDecoration.disabledBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else if (_hasFocus && (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.focusedBorder?.isOutline ?? false) {
+        final b =
+            super._baseInputDecoration.focusedBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.enabledBorder?.isOutline ?? false) {
+        final b =
+            super._baseInputDecoration.enabledBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.errorBorder?.isOutline ?? false) {
+        final b = super._baseInputDecoration.errorBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else if (_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.focusedErrorBorder?.isOutline ?? false) {
+        final b =
+            super._baseInputDecoration.focusedErrorBorder as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    } else {
+      if (super._baseInputDecoration.border?.isOutline ?? false) {
+        final b = super._baseInputDecoration.border as OutlineInputBorder;
+        return b.borderRadius;
+      }
+    }
+
+    return BorderRadius.circular(4);
+  }
+
+  Color get _borderColor {
+    if (!widget.enabled) {
+      if (super._baseInputDecoration.disabledBorder != null) {
+        final b = super._baseInputDecoration.disabledBorder!;
+        return b.borderSide.color;
+      }
+    } else if (_hasFocus && (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.focusedBorder != null) {
+        final b = super._baseInputDecoration.focusedBorder!;
+        return b.borderSide.color;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.enabledBorder != null) {
+        final b = super._baseInputDecoration.enabledBorder!;
+        return b.borderSide.color;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.errorBorder != null) {
+        final b = super._baseInputDecoration.errorBorder!;
+        return b.borderSide.color;
+      }
+    } else if (_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.focusedErrorBorder != null) {
+        final b = super._baseInputDecoration.focusedErrorBorder!;
+        return b.borderSide.color;
+      }
+    } else {
+      if (super._baseInputDecoration.border != null) {
+        final b = super._baseInputDecoration.border!;
+        return b.borderSide.color;
+      }
+    }
+
+    return theme.colorScheme.primary;
+  }
+
+  double get _borderWidth {
+    if (!widget.enabled) {
+      if (super._baseInputDecoration.disabledBorder != null) {
+        final b = super._baseInputDecoration.disabledBorder!;
+        return b.borderSide.width;
+      }
+    } else if (_hasFocus && (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.focusedBorder != null) {
+        final b = super._baseInputDecoration.focusedBorder!;
+        return b.borderSide.width;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage == null || _errorMessage!.isEmpty)) {
+      if (super._baseInputDecoration.enabledBorder != null) {
+        final b = super._baseInputDecoration.enabledBorder!;
+        return b.borderSide.width;
+      }
+    } else if (!_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.errorBorder != null) {
+        final b = super._baseInputDecoration.errorBorder!;
+        return b.borderSide.width;
+      }
+    } else if (_hasFocus &&
+        (_errorMessage != null || _errorMessage!.isNotEmpty)) {
+      if (super._baseInputDecoration.focusedErrorBorder != null) {
+        final b = super._baseInputDecoration.focusedErrorBorder!;
+        return b.borderSide.width;
+      }
+    } else {
+      if (super._baseInputDecoration.border != null) {
+        final b = super._baseInputDecoration.border!;
+        return b.borderSide.width;
+      }
+    }
+
+    return 1;
+  }
+
   String? _errorMessage;
 
   Color? get _bgColor => theme.inputDecorationTheme.fillColor;
@@ -685,79 +914,71 @@ class _MdTextFormFieldExpandedState extends _MdTextFormFieldState {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: _bgColor,
-            borderRadius: BorderRadius.circular(4),
-            border: _hasFocus || _errorMessage != null
-                ? Border.all(
-                    color: _errorMessage == null
-                        ? theme.inputDecorationTheme.focusedBorder?.borderSide
-                                .color ??
-                            theme.colorScheme.primary
-                        : theme.inputDecorationTheme.errorBorder?.borderSide
-                                .color ??
-                            theme.colorScheme.error,
-                    width: 1,
-                  )
-                : Border.all(
-                    color: theme.inputDecorationTheme.outlineBorder?.color ??
-                        (widget.outlineBorderColor ?? Colors.transparent),
-                  ),
+            borderRadius: _borderRadius,
+            border: Border.all(
+              color: _borderColor,
+              width: _borderWidth,
+            ),
           ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 18,
-                    bottom: 8,
-                  ),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      textTheme: TextTheme(
-                        bodyLarge: theme.textTheme.bodyLarge?.copyWith(
-                          decoration: TextDecoration.none,
-                          color: !widget.enabled
-                              ? textColor?.withOpacity(.8)
-                              : textColor?.withOpacity(.38),
-                        ),
-                      ),
-                      colorScheme: Theme.of(context).colorScheme.copyWith(
-                            error: _bgColor,
-                          ),
+          child: ClipRRect(
+            borderRadius: _borderRadius,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 18,
+                      bottom: 8,
                     ),
-                    child: TextFormField(
-                      textAlignVertical: TextAlignVertical.top,
-                      minLines: null,
-                      maxLines: null,
-                      expands: true,
-                      maxLength: widget.maxLength,
-                      key: widget.wdKey,
-                      inputFormatters: widget.inputFormatters,
-                      focusNode: _focusNode,
-                      validator: (value) {
-                        _validateField(value);
-                        return _errorMessage == null ? null : "";
-                      },
-                      obscureText: widget.obscureText && !_passwordVisibile,
-                      enabled: widget.enabled,
-                      onChanged: (value) {
-                        if (widget.validateOnType) {
-                          _deboucer.value = value;
-                        }
-                        widget.onChanged?.call(value);
-                      },
-                      controller: _controller,
-                      autofocus: widget.autoFocus,
-                      keyboardType: widget.keyboardType,
-                      enableInteractiveSelection:
-                          widget.enableInteractiveSelection,
-                      textInputAction: widget.textInputAction,
-                      onFieldSubmitted: widget.onFieldSubmitted,
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        textTheme: TextTheme(
+                          bodyLarge: theme.textTheme.bodyLarge?.copyWith(
+                            decoration: TextDecoration.none,
+                            color: !widget.enabled
+                                ? textColor?.withOpacity(.8)
+                                : textColor?.withOpacity(.38),
+                          ),
+                        ),
+                        colorScheme: Theme.of(context).colorScheme.copyWith(
+                              error: _bgColor,
+                            ),
+                      ),
+                      child: TextFormField(
+                        textAlignVertical: TextAlignVertical.top,
+                        minLines: null,
+                        maxLines: null,
+                        expands: true,
+                        maxLength: widget.maxLength,
+                        key: widget.wdKey,
+                        inputFormatters: widget.inputFormatters,
+                        focusNode: _focusNode,
+                        validator: (value) {
+                          _validateField(value);
+                          return _errorMessage == null ? null : "";
+                        },
+                        obscureText: widget.obscureText && !_passwordVisibile,
+                        enabled: widget.enabled,
+                        onChanged: (value) {
+                          if (widget.validateOnType) {
+                            _deboucer.value = value;
+                          }
+                          widget.onChanged?.call(value);
+                        },
+                        controller: _controller,
+                        autofocus: widget.autoFocus,
+                        keyboardType: widget.keyboardType,
+                        enableInteractiveSelection:
+                            widget.enableInteractiveSelection,
+                        textInputAction: widget.textInputAction,
+                        onFieldSubmitted: widget.onFieldSubmitted,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              if (_suffixIcon != null) _suffixIcon!
-            ],
+                if (_suffixIcon != null) _suffixIcon!
+              ],
+            ),
           ),
         ),
         if (_errorMessage != null) ...[

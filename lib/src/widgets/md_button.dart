@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/base/md_state.dart';
-import 'md_icon.dart';
+import '../../md_engine.dart';
 
 enum MdButtonIconType { suffix, prefix }
 
@@ -14,7 +13,7 @@ class MdButton extends StatefulWidget {
     this.outline = false,
     this.style,
     this.inLoading = false,
-    this.height = 46,
+    this.height,
     this.width,
     this.iconType = MdButtonIconType.prefix,
   });
@@ -24,7 +23,7 @@ class MdButton extends StatefulWidget {
   final bool outline;
   final bool inLoading;
   final ButtonStyle? style;
-  final double height;
+  final double? height;
   final double? width;
   final MdButtonIconType iconType;
   @override
@@ -78,7 +77,7 @@ class _MdButtonState extends MdState<MdButton> {
 
   Color? get indicatorColor {
     return theme.elevatedButtonTheme.style?.foregroundColor
-        ?.resolve(<MaterialState>{MaterialState.pressed})?.withOpacity(1);
+        ?.resolve(<WidgetState>{WidgetState.pressed})?.withOpacity(1);
   }
 
   Widget get _buildElevated {
@@ -100,7 +99,7 @@ class _MdButtonState extends MdState<MdButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: widget.height,
+      height: widget.height ?? kDefaultMdButtonHeight,
       width: widget.width ?? double.maxFinite,
       child: !widget.outline ? _buildElevated : _buildOutline,
     );
