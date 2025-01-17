@@ -95,13 +95,12 @@ class _MdCollapseState extends MdState<MdCollapse> {
                 width: 0,
               ),
               backgroundColor:
-                  widget.backgroundColor ?? theme.colorScheme.background,
+                  widget.backgroundColor ?? theme.colorScheme.surface,
               collapsedBackgroundColor:
-                  widget.backgroundColor ?? theme.colorScheme.background,
-              iconColor:
-                  widget.onBackgroundColor ?? theme.colorScheme.onBackground,
+                  widget.backgroundColor ?? theme.colorScheme.surface,
+              iconColor: widget.onBackgroundColor ?? theme.colorScheme.surface,
               collapsedIconColor:
-                  widget.onBackgroundColor ?? theme.colorScheme.onBackground,
+                  widget.onBackgroundColor ?? theme.colorScheme.surface,
               leading: Padding(
                 padding: const EdgeInsets.only(right: 6),
                 child: AnimatedRotation(
@@ -111,7 +110,7 @@ class _MdCollapseState extends MdState<MdCollapse> {
                     Icons.keyboard_arrow_down,
                     size: 20,
                     color: widget.onBackgroundColor ??
-                        theme.colorScheme.onBackground.withOpacity(.9),
+                        theme.colorScheme.onSurface.withOpacity(.9),
                   ),
                 ),
               ),
@@ -120,14 +119,14 @@ class _MdCollapseState extends MdState<MdCollapse> {
                     (widget.title ?? ""),
                     style: theme.textTheme.headlineSmall?.copyWith(
                       color: widget.onBackgroundColor ??
-                          theme.colorScheme.onBackground,
+                          theme.colorScheme.onSurface,
                     ),
                   ),
               children: [
                 DefaultTextStyle.merge(
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: widget.onBackgroundColor ??
-                        theme.colorScheme.onBackground,
+                    color:
+                        widget.onBackgroundColor ?? theme.colorScheme.onSurface,
                   ),
                   child: child,
                 )

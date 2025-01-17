@@ -13,7 +13,7 @@ class MdTitle extends MdStateless {
       text,
       style: theme.textTheme.headlineSmall?.copyWith(
         fontWeight: FontWeight.w700,
-        color: theme.colorScheme.onBackground,
+        color: theme.colorScheme.onSurface,
       ),
     );
   }

@@ -96,7 +96,7 @@ class _MdDrawerState extends MdWidgetState<MdDrawer>
   Widget build(BuildContext context) {
     return SafeArea(
       child: ColoredBox(
-        color: _bgColor ?? theme.colorScheme.background,
+        color: _bgColor ?? theme.colorScheme.surface,
         child: AnimatedSize(
           duration: const Duration(milliseconds: 300),
           curve: Curves.linear,

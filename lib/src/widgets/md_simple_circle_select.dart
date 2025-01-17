@@ -49,7 +49,7 @@ class MdSimpleCircleSelect extends MdStateless {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: ckeckIsSelected(item)
-              ? theme.colorScheme.background
+              ? theme.colorScheme.surface
               : Colors.transparent,
           border: ckeckIsSelected(item)
               ? Border.all(

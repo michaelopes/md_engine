@@ -16,15 +16,13 @@ class MdBinaryCheckItem {
 
 class MdFormBinaryCheck extends FormField<MdBinaryCheckItem> {
   MdFormBinaryCheck({
-    Key? key,
+    super.key,
     required this.option01,
     required this.option02,
     required this.onCheck,
-    String? Function(MdBinaryCheckItem?)? validator,
+    super.validator,
     this.label = "",
   }) : super(
-          key: key,
-          validator: validator,
           builder: (FormFieldState<MdBinaryCheckItem> field) {
             final _MdFormBinaryCheckState state =
                 field as _MdFormBinaryCheckState;
@@ -176,7 +174,7 @@ class _MdBinaryCheckState extends MdState<MdBinaryCheck> {
                 selectedColor: theme.colorScheme.primary,
                 textStyle: theme.inputDecorationTheme.labelStyle,
                 fillColor: theme.inputDecorationTheme.fillColor,
-                color: theme.colorScheme.onBackground,
+                color: theme.colorScheme.onSurface,
                 borderRadius: BorderRadius.circular(6),
                 onPressed: (index) {
                   setState(() {

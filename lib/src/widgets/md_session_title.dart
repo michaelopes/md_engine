@@ -10,7 +10,7 @@ class MdSessionTitle extends MdStateless {
       text,
       style: theme.textTheme.bodyLarge?.copyWith(
         fontWeight: FontWeight.w700,
-        color: theme.colorScheme.onBackground,
+        color: theme.colorScheme.onSurface,
       ),
     );
   }

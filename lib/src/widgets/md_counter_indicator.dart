@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:md_engine/md_engine.dart';
 
-import '../core/util/md_typedefs.dart';
-
 class MdCounterIndicator<T extends num> extends StatefulWidget {
   final T start;
   final T end;
@@ -11,13 +9,13 @@ class MdCounterIndicator<T extends num> extends StatefulWidget {
   final MdTextFormater? formater;
 
   const MdCounterIndicator({
-    Key? key,
+    super.key,
     required this.start,
     required this.end,
     this.textStyle,
     this.formater,
     this.duration = const Duration(seconds: 2),
-  }) : super(key: key);
+  });
 
   @override
   State<MdCounterIndicator> createState() => _MdCounterIndicatorState<T>();

@@ -157,7 +157,7 @@ class _MdSelectFieldDialogState extends MdState<MdSelectFieldDialog> {
       context: context,
       builder: (_) {
         return Dialog.fullscreen(
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           child: Scaffold(
             appBar: MdAppBar(),
             body: Column(
@@ -202,7 +202,7 @@ class _MdSelectFieldDialogState extends MdState<MdSelectFieldDialog> {
       leading: item.leading,
       title: Text(
         item.text,
-        style: TextStyle(color: theme.colorScheme.onBackground),
+        style: TextStyle(color: theme.colorScheme.onSurface),
       ),
       onTap: () {
         Navigator.of(context).pop(item);

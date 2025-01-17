@@ -106,7 +106,7 @@ class MdExpansionState extends MdState<MdExpansion> {
                     _h > 0
                         ? Icons.expand_less_rounded
                         : Icons.expand_more_rounded,
-                    color: theme.colorScheme.onBackground.withOpacity(.8),
+                    color: theme.colorScheme.onSurface.withOpacity(.8),
                     size: 24,
                   )
                 ],

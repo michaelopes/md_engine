@@ -1,8 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:md_engine/md_engine.dart';
 
-import 'md_appbar.dart';
-
 class MdSpacerAppBar extends StatefulWidget {
   const MdSpacerAppBar({
     super.key,

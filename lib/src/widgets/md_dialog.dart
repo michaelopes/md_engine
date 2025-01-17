@@ -4,6 +4,7 @@ import 'package:md_engine/src/core/util/md_toolkit.dart';
 
 import 'md_button.dart';
 import 'md_height.dart';
+import 'md_will_pop_scope.dart';
 
 class MdDialog extends StatefulWidget {
   final String title;
@@ -46,7 +47,7 @@ class MdDialog extends StatefulWidget {
       barrierColor: barrierColor ??
           MdToolkit.I
               .getColorInverted(
-                Theme.of(context).colorScheme.background,
+                Theme.of(context).colorScheme.surface,
               )
               .withOpacity(.35),
     );
@@ -56,7 +57,7 @@ class MdDialog extends StatefulWidget {
 class _MdDialogState extends MdState<MdDialog> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return MdWillPopScope(
       onWillPop: () async => false,
       child: UnconstrainedBox(
         child: ConstrainedBox(
@@ -128,7 +129,7 @@ class _MdDialogState extends MdState<MdDialog> {
                                   style: theme.textTheme.labelLarge?.copyWith(
                                       color: MdToolkit.I.getColorInverted(
                                     theme.dialogTheme.backgroundColor ??
-                                        theme.colorScheme.background,
+                                        theme.colorScheme.surface,
                                   )),
                                 ),
                               ),

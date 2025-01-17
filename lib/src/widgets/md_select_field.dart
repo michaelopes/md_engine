@@ -136,8 +136,8 @@ class _MDSelectFieldState extends MdState<MDSelectField> {
             offset: const Offset(0, -4),
             scrollbarTheme: ScrollbarThemeData(
               radius: const Radius.circular(8),
-              thickness: MaterialStateProperty.all(6),
-              thumbVisibility: MaterialStateProperty.all(true),
+              thickness: WidgetStateProperty.all(6),
+              thumbVisibility: WidgetStateProperty.all(true),
             ),
           ),
           menuItemStyleData: const MenuItemStyleData(

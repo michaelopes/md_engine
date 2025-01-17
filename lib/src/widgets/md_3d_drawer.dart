@@ -52,7 +52,7 @@ class Md3dDrawerState extends MdState<Md3dDrawer> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  theme.colorScheme.background,
+                  theme.colorScheme.surface,
                 ],
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,

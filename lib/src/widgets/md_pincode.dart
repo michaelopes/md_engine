@@ -8,11 +8,11 @@ import '../core/base/md_state.dart';
 
 class MdPinCode extends StatefulWidget {
   const MdPinCode({
-    Key? key,
+    super.key,
     required this.onChanged,
     required this.onDone,
     this.wdKey,
-  }) : super(key: key);
+  });
 
   final void Function(String value) onChanged;
   final void Function(String value) onDone;
@@ -269,7 +269,7 @@ class _PinCodeTextField extends StatefulWidget {
   final bool hasUnderline;
 
   const _PinCodeTextField({
-    Key? key,
+    super.key,
     this.isCupertino = false,
     this.maxLength = 4,
     this.controller,
@@ -305,7 +305,7 @@ class _PinCodeTextField extends StatefulWidget {
     this.pinBoxRadius = 0,
     this.hideDefaultKeyboard = false,
     this.hasUnderline = false,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:md_engine/src/core/util/md_view_error_event.dart';
 
 import '../../../md_engine.dart';
 

@@ -89,6 +89,7 @@ class MdApp {
     bool enableProativeState = true,
     ErrorStateObsListener? errorListener,
   }) async {
+    this.flavor = flavor;
     await beforeEnsureInitialized?.call();
     WidgetsFlutterBinding.ensureInitialized();
     QR.setUrlStrategy();
@@ -113,7 +114,7 @@ class MdApp {
     if (appName.isNotEmpty) {
       this.appName = appName;
     }
-    this.flavor = flavor;
+
     GetIt.I.registerFactory<IMdHttpDriver>(() => MdDioHttpDriver());
     await afterEnsureInitialized?.call();
     runApp(

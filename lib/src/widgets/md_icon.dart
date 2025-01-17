@@ -6,14 +6,14 @@ enum MdIconType { svg, png }
 class MdIcn extends StatelessWidget {
   const MdIcn({
     this.icon,
-    Key? key,
+    super.key,
     this.fit,
     this.color,
     this.width,
     this.height,
     this.onTap,
     this.padding,
-  }) : super(key: key);
+  });
 
   final String? icon;
   final BoxFit? fit;

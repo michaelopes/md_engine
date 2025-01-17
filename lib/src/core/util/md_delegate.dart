@@ -3,20 +3,14 @@ import 'package:qlevar_router/qlevar_router.dart';
 
 class MdDelegate extends QRouterDelegate {
   MdDelegate(
-    List<QRoute> routes, {
-    GlobalKey<NavigatorState>? navKey,
-    String? initPath,
-    bool withWebBar = false,
-    bool alwaysAddInitPath = false,
+    super.routes, {
+    super.navKey,
+    super.initPath,
+    super.withWebBar,
+    super.alwaysAddInitPath,
     List<NavigatorObserver>? observers,
-    String? restorationScopeId,
-  }) : super(routes,
-            alwaysAddInitPath: alwaysAddInitPath,
-            initPath: initPath,
-            navKey: navKey,
-            observers: observers ?? [],
-            restorationScopeId: restorationScopeId,
-            withWebBar: withWebBar) {
+    super.restorationScopeId,
+  }) : super(observers: observers ?? []) {
     this.observers.add(_DelegateObserver(
       onChangeRoute: ((route) {
         currentRoute = route;
@@ -29,7 +23,7 @@ class MdDelegate extends QRouterDelegate {
   @override
   Future<bool> popRoute() async {
     if (currentRoute != null) {
-      final willPopResult = await currentRoute?.willPop();
+      final willPopResult = currentRoute?.popDisposition;
       if (willPopResult == RoutePopDisposition.pop) {
         return super.popRoute();
       } else {

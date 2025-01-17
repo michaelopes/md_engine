@@ -33,7 +33,7 @@ class MdListNoItemsFound extends MdStateless {
         Text(
           title ?? tr.no_items_found.title(),
           style: theme.textTheme.headlineSmall?.copyWith(
-            color: theme.colorScheme.onBackground,
+            color: theme.colorScheme.onSurface,
           ),
         ),
         const MdHeight(12),
@@ -43,7 +43,7 @@ class MdListNoItemsFound extends MdStateless {
             message ?? tr.no_items_found.message(),
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onBackground,
+              color: theme.colorScheme.onSurface,
             ),
           ),
         ),
