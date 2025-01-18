@@ -10,6 +10,7 @@ import 'core/i18n/i18n.dart';
 import 'core/util/md_screen_utility.dart';
 
 typedef AppStepCallback = Future<void> Function();
+typedef AppStepBindingCallback = Future<void> Function(WidgetsBinding binding);
 
 class MdApp {
   MdApp._internal();
@@ -53,6 +54,7 @@ class MdApp {
     MdTranslationOptions? translationOptions,
     AppStepCallback? beforeEnsureInitialized,
     AppStepCallback? afterEnsureInitialized,
+    AppStepBindingCallback? afterEnsureBinding,
     VoidCallback? onComplete,
     VoidCallback? initState,
     VoidCallback? dispose,
@@ -91,7 +93,8 @@ class MdApp {
   }) async {
     this.flavor = flavor;
     await beforeEnsureInitialized?.call();
-    WidgetsFlutterBinding.ensureInitialized();
+    final binding = WidgetsFlutterBinding.ensureInitialized();
+    afterEnsureBinding?.call(binding);
     QR.setUrlStrategy();
 
     if (translationOptions != null) {
