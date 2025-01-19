@@ -11,7 +11,7 @@ class MdSubtitle extends MdStateless {
     return Text(
       text,
       style: theme.textTheme.bodySmall?.copyWith(
-        color: theme.colorScheme.onSurface,
+        color: theme.colorScheme.onSurface.withOpacity(.8),
       ),
     );
   }

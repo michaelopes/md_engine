@@ -20,6 +20,7 @@ export 'package:universal_platform/universal_platform.dart';
 export 'package:encrypt_env/encrypt_env.dart';
 export 'package:operance_datatable/operance_datatable.dart';
 export 'package:get_storage/get_storage.dart';
+export 'package:url_launcher/url_launcher.dart';
 
 export './src/md_app.dart';
 
