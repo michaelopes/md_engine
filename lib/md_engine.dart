@@ -66,6 +66,7 @@ export 'src/core/util/md_asset_image.dart';
 
 export 'src/core/validator/md_field_validator.dart';
 export 'src/core/validator/md_validator.dart';
+export 'src/core/validator/md_cnpj_validator.dart';
 
 export 'src/widgets/md_appbar.dart';
 export 'src/widgets/md_binary_check.dart';
