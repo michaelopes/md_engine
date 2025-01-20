@@ -36,7 +36,31 @@ class GlobalErrorObserver {
     var reason =
         error is MdHttpDriverServerFailure ? error.message : error.toString();
     reason = "$reason\n\n$stackTrace";
-    if (error is MdHttpDriverNetworkFailure) {
+    if (error is MdCodeIdentifiedFailure) {
+      _isLocked = true;
+      await MdDialog(
+        // ignore: use_build_context_synchronously
+        title: "exceptions.title".tr(ctx),
+        // ignore: use_build_context_synchronously
+        message: error.message.tr(ctx),
+        body: error.reason.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.only(top: 12, bottom: 12),
+                child: MdFailureMoreDetails(
+                  message: error.reason,
+                ),
+              )
+            : null,
+        marginBottom: error.reason.isEmpty ? 16 : 0,
+        onTap: () {
+          Navigator.of(ctx).pop();
+          onBack?.call(error);
+        },
+        // ignore: use_build_context_synchronously
+        buttonText: "shared.i_understood".tr(ctx),
+      ).show(QR.context!);
+      _isLocked = false;
+    } else if (error is MdHttpDriverNetworkFailure) {
       _isLocked = true;
       await MdDialog(
         // ignore: use_build_context_synchronously

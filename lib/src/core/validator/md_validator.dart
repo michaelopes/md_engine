@@ -105,12 +105,12 @@ class MdValidator {
   }
 
   static bool isPhone(String text) {
-    var phone = MdToolkit.I.removeEspecialCharacters(text);
+    var phone = MdToolkit.I.removeSpecialCharacters(text);
     return phone.length == 11 || phone.length == 10;
   }
 
   static bool isCellPhone(String text) {
-    var phone = MdToolkit.I.removeEspecialCharacters(text).replaceAll(" ", "");
+    var phone = MdToolkit.I.removeSpecialCharacters(text).replaceAll(" ", "");
     if (phone.isEmpty) {
       return true;
     }

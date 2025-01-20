@@ -15,12 +15,9 @@ abstract class IMdMemoryCache {
   MdMemoryCacheItem get(String cacheId);
 }
 
-class FPMemoryCache implements IMdMemoryCache {
-  static final FPMemoryCache _instance = FPMemoryCache._internal();
-  FPMemoryCache._internal();
-  factory FPMemoryCache() {
-    return _instance;
-  }
+class MdMemoryCache implements IMdMemoryCache {
+  static final MdMemoryCache I = MdMemoryCache._internal();
+  MdMemoryCache._internal();
 
   final List<MdMemoryCacheItem> _store = [];
 

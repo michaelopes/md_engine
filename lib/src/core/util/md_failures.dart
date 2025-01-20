@@ -45,3 +45,13 @@ class MdHttpDriverServerBadResponseFailure extends MdFailure {
 class MdHttpDriverNetworkFailure extends MdFailure {
   MdHttpDriverNetworkFailure({String message = ""}) : super(message);
 }
+
+class MdCodeIdentifiedFailure extends MdFailure {
+  final String code;
+  final String reason;
+  MdCodeIdentifiedFailure({
+    required String translation,
+    required this.code,
+    this.reason = "",
+  }) : super(translation);
+}

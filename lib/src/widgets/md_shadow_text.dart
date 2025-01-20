@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 class MdShadowText extends StatelessWidget {
-  const MdShadowText(this.text, {super.key, this.style, this.textAlign});
+  const MdShadowText(this.text,
+      {super.key, this.style, this.textAlign, this.sigma = 2});
 
   final String text;
   final TextStyle? style;
   final TextAlign? textAlign;
+  final double sigma;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +16,8 @@ class MdShadowText extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            top: 2.0,
-            left: 2.0,
+            top: sigma,
+            left: sigma,
             child: Text(
               text,
               textAlign: textAlign,
@@ -23,7 +25,7 @@ class MdShadowText extends StatelessWidget {
             ),
           ),
           BackdropFilter(
-            filter: ui.ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+            filter: ui.ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
             child: Text(
               text,
               style: style,

@@ -153,7 +153,7 @@ class MdFieldValidator {
         case MdValidateTypes.cellphone:
           {
             var isStrong = MdValidator.isCellPhone(
-                MdToolkit.I.removeEspecialCharacters(value));
+                MdToolkit.I.removeSpecialCharacters(value));
             if (!isStrong) {
               result =
                   result = AppTranslate.tr("validador.invalid_phone", context);
@@ -224,7 +224,7 @@ class MdFieldValidator {
           }
         case MdValidateTypes.cpfOrCnpj:
           {
-            var text = MdToolkit.I.removeEspecialCharacters(value.toString());
+            var text = MdToolkit.I.removeSpecialCharacters(value.toString());
             if (text.length == 11) {
               if (!MdCPFValidator.isValid(value.toString())) {
                 result = AppTranslate.tr("validador.invalid_cpf", context);

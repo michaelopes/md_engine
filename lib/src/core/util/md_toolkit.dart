@@ -17,12 +17,12 @@ class MdToolkit {
 
   static final MdToolkit I = MdToolkit._internal();
 
-  String removeEspecialCharacters(String text) {
-    return text.replaceAll(RegExp(r'[^\w\s]+'), '').replaceAll(" ", "");
+  String getFormatedReason(Object e, StackTrace s) {
+    return "$e\n\n$s";
   }
 
   String brCellPhoneNormalize(String value) {
-    var newV = removeEspecialCharacters(
+    var newV = removeSpecialCharacters(
       value.replaceAll("+55", "").replaceFirst("0", "").replaceAll("+550", ""),
     );
 
