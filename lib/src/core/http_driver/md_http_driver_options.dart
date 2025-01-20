@@ -77,6 +77,8 @@ final class MdHttpDriverOptions {
       appVersion: appVersion ?? this.appVersion,
       packageName: packageName ?? this.packageName,
       buildSignature: buildSignature ?? this.buildSignature,
+      responseParser: responseParser,
+      middleware: middleware,
     );
   }
 }

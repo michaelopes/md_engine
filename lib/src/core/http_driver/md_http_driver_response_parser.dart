@@ -40,6 +40,7 @@ abstract base class MdBaseHttpDriverResponseParser {
       var errorReponse = MdHttpDriverResponse(
         message: error.message ?? "",
         statusCode: error.response?.statusCode ?? 400,
+        data: error.response?.data,
       );
       switch (error.response!.statusCode ?? 500) {
         case >= 300 && < 400:
@@ -52,6 +53,7 @@ abstract base class MdBaseHttpDriverResponseParser {
             MdHttpDriverResponse(
               message: error.message ?? "",
               statusCode: error.response?.statusCode ?? 400,
+              data: error.response?.data,
             ),
           );
       }
@@ -132,6 +134,7 @@ class MdHttpDriverResponse {
   }
 
   MdHttpDriverResponse copyWith({
+    String? message,
     dynamic data,
     String? code,
     MdFailure? failure,
@@ -141,7 +144,7 @@ class MdHttpDriverResponse {
       code: code ?? this.code,
       failure: failure ?? _failure,
       statusCode: statusCode,
-      message: message,
+      message: message ?? this.message,
     );
   }
 }
