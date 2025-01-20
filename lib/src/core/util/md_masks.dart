@@ -21,6 +21,9 @@ class MdMasks {
   TextInputMask get cpf => TextInputMask(
         mask: '999.999.999-99',
       );
+  TextInputMask get cnpj => TextInputMask(
+        mask: '99.999.999/9999-99',
+      );
 
   TextInputMask get cardNumber => TextInputMask(
         mask: '9999 9999 9999 9999',
