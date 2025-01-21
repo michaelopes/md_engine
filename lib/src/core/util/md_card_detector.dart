@@ -55,6 +55,18 @@ Map<Brand, Set<List<String>>> numberPatterns = <Brand, Set<List<String>>>{
     <String>['270', '271'],
     <String>['2720'],
   },
+  Brand.elo: <List<String>>{
+    <String>['4011'],
+    <String>['4312', '4368'],
+    <String>['4514', '4576'],
+    <String>['5041', '5066'],
+    <String>['5067', '5099'],
+    <String>['6277'],
+    <String>['6362', '6363'],
+    <String>['6500', '6509'],
+    <String>['6516', '6517'],
+    <String>['6550', '6552'],
+  },
 };
 
 enum Brand {
@@ -63,6 +75,7 @@ enum Brand {
   visa,
   americanExpress,
   discover,
+  elo,
 }
 
 extension ParseCardType on Brand {
