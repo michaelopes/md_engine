@@ -15,8 +15,12 @@ Future<void> main(List<String> args) async {
     "--file",
     "md_environment",
     "--format",
-    "cc"
+    "cc",
   ];
+
+  if (File("environment/prod_environment.yaml").existsSync()) {
+    envArgs.addAll(["--environment", "prod"]);
+  }
 
   if (args.contains("env")) {
     await _flushThenExit(await EncryptEnvCommandRunner().run(envArgs));

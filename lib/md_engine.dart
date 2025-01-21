@@ -46,6 +46,7 @@ export 'src/core/util/md_view_error_event.dart';
 export 'src/core/util/md_capitalize_words_text_formatter.dart';
 export 'src/core/util/md_operance_data_controller.dart';
 export 'src/core/util/md_memory_cache.dart';
+export 'src/core/util/md_card_detector.dart';
 
 export 'src/core/viewmodel/md_viewmodel.dart';
 export 'src/core/viewmodel/md_viewmodel_state.dart';
