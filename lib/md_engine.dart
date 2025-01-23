@@ -107,6 +107,7 @@ export 'src/widgets/md_dashboard_card.dart';
 export 'src/widgets/md_counter_indicator.dart';
 export 'src/widgets/md_sub_route_builder.dart';
 export 'src/widgets/md_rotatable.dart';
+export 'src/widgets/md_observer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:md_engine/src/core/i18n/app_translate.dart';
