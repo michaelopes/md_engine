@@ -531,6 +531,22 @@ class MdToolkit {
     return T.toString();
   }
 
+  String obfuscateName(String name) {
+    if (name.length <= 2) {
+      return name;
+    } else if (name.length > 10) {
+      final start = name.substring(0, 2);
+      final end = name.substring(name.length - 2);
+      final obfuscated = '*' * (name.length - 4);
+      return '$start$obfuscated$end';
+    } else {
+      final firstChar = name[0];
+      final lastChar = name[name.length - 1];
+      final obfuscated = '*' * (name.length - 2);
+      return '$firstChar$obfuscated$lastChar';
+    }
+  }
+
   Color generateHighlightColor(Color tColor) {
     if (ThemeData.estimateBrightnessForColor(tColor) == Brightness.dark) {
       return const Color(0xFFF6F6F8);
@@ -608,4 +624,34 @@ class MdToolkit {
             : "${splited.first} ${splited.last}"
         : name;
   }
+
+  List<String> get brStates => [
+        "AC",
+        "AL",
+        "AP",
+        "AM",
+        "BA",
+        "CE",
+        "DF",
+        "ES",
+        "GO",
+        "MA",
+        "MT",
+        "MS",
+        "MG",
+        "PA",
+        "PB",
+        "PR",
+        "PE",
+        "PI",
+        "RJ",
+        "RN",
+        "RS",
+        "RO",
+        "RR",
+        "SC",
+        "SP",
+        "SE",
+        "TO",
+      ];
 }

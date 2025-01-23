@@ -363,15 +363,16 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
 
   @override
   void didUpdateWidget(oldWidget) {
-    _setup();
     super.didUpdateWidget(oldWidget);
-    //_setup();
   }
 
   @override
   void reassemble() {
-    setState(() {
-      _hasFocus = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.unfocus();
+      setState(() {
+        _hasFocus = false;
+      });
     });
     super.reassemble();
   }

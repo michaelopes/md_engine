@@ -21,7 +21,7 @@ class MdTitle extends MdStateless {
       style: style?.copyWith(
             color: theme.colorScheme.onSurface.withOpacity(opacity),
           ) ??
-          theme.textTheme.headlineSmall?.copyWith(
+          theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w700,
             color: theme.colorScheme.onSurface.withOpacity(opacity),
           ),

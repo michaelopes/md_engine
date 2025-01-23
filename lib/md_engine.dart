@@ -46,6 +46,7 @@ export 'src/core/util/md_view_error_event.dart';
 export 'src/core/util/md_capitalize_words_text_formatter.dart';
 export 'src/core/util/md_operance_data_controller.dart';
 export 'src/core/util/md_memory_cache.dart';
+export 'src/core/util/md_card_detector.dart';
 
 export 'src/core/viewmodel/md_viewmodel.dart';
 export 'src/core/viewmodel/md_viewmodel_state.dart';
@@ -107,6 +108,7 @@ export 'src/widgets/md_dashboard_card.dart';
 export 'src/widgets/md_counter_indicator.dart';
 export 'src/widgets/md_sub_route_builder.dart';
 export 'src/widgets/md_rotatable.dart';
+export 'src/widgets/md_observer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:md_engine/src/core/i18n/app_translate.dart';
