@@ -74,18 +74,35 @@ class MdToolkit {
         : name;
   }
 
-  String enumToString(Enum en) {
+  String enumToString(Enum en, {bool withHyphen = false}) {
     var splited = en.toString().split(".");
-    return splited.length > 1 ? splited[1] : splited[0];
+    final result = splited.length > 1 ? splited[1] : splited[0];
+    return withHyphen ? convertCase(result) : result;
   }
 
   T? enumFromString<T extends Enum>(List<T> ens, String value) {
     for (var item in ens) {
-      if (enumToString(item) == value) {
+      if (enumToString(item) == value ||
+          enumToString(item, withHyphen: true) == value) {
         return item;
       }
     }
     return null;
+  }
+
+  String convertCase(String input) {
+    if (input.contains('-')) {
+      return input.split('-').map((word) {
+        return word[0].toUpperCase() + word.substring(1).toLowerCase();
+      }).join('');
+    } else if (input.contains(RegExp(r'[A-Z]'))) {
+      return input
+          .replaceAllMapped(RegExp(r'([a-z0-9])([A-Z])'),
+              (Match m) => '${m[1]}-${m[2]!.toLowerCase()}')
+          .toLowerCase();
+    } else {
+      return input;
+    }
   }
 
   String camelToUnderscore(String text) {
@@ -134,8 +151,10 @@ class MdToolkit {
     return removeDiacritics(text);
   }
 
-  String formatBrDateTime(DateTime date) {
-    var format = DateFormat("dd MMMM yyyy, HH:mm");
+  String formatSematicDatetime(DateTime date,
+      {String? locale, bool withSeconds = false}) {
+    var format =
+        DateFormat("dd MMMM yyyy, HH:mm${withSeconds ? ":ss" : ""}", locale);
     return format.format(date);
   }
 
@@ -161,6 +180,11 @@ class MdToolkit {
     return format.format(date);
   }
 
+  String formatISODate(DateTime date) {
+    var format = DateFormat("yyyy-MM-dd");
+    return format.format(date);
+  }
+
   String formatBrDatetime(DateTime date) {
     var format = DateFormat("dd/MM/yyyy HH:mm", "pt_BR");
     return format.format(date);
@@ -175,12 +199,12 @@ class MdToolkit {
 
   String formatMoney(
     double value, {
-    String simbol = "R\$",
+    String simbol = "R\$ ",
     String locale = "pt_BR",
   }) {
     final formatedPrice = NumberFormat("#,##0.00", locale);
     return simbol.isNotEmpty
-        ? "$simbol ${formatedPrice.format(value)}"
+        ? "$simbol${formatedPrice.format(value)}"
         : formatedPrice.format(value);
   }
 

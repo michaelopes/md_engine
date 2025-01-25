@@ -76,8 +76,15 @@ class _MdButtonState extends MdState<MdButton> {
   }
 
   Color? get indicatorColor {
-    return theme.elevatedButtonTheme.style?.foregroundColor
-        ?.resolve(<WidgetState>{WidgetState.pressed})?.withOpacity(1);
+    return widget.outline
+        ? theme.outlinedButtonTheme.style?.textStyle
+            ?.resolve(<WidgetState>{WidgetState.pressed})
+            ?.color
+            ?.withOpacity(1)
+        : theme.elevatedButtonTheme.style?.textStyle
+            ?.resolve(<WidgetState>{WidgetState.pressed})
+            ?.color
+            ?.withOpacity(1);
   }
 
   Widget get _buildElevated {

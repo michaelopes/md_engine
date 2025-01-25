@@ -9,8 +9,12 @@ extension MdResponsiveMetricsExt on BuildContext {
 }
 
 extension StringTrExt on String {
-  String tr(BuildContext context) {
-    return AppTranslate.tr(this, context);
+  String tr(BuildContext context, {Map<String, String>? params}) {
+    return AppTranslate.tr(
+      this,
+      context,
+      params: params,
+    );
   }
 }
 
