@@ -532,19 +532,28 @@ class MdToolkit {
   }
 
   String obfuscateName(String name) {
+    final split = name.split(' ');
     if (name.length <= 2) {
-      return name;
-    } else if (name.length > 10) {
-      final start = name.substring(0, 2);
-      final end = name.substring(name.length - 2);
-      final obfuscated = '*' * (name.length - 4);
-      return '$start$obfuscated$end';
-    } else {
-      final firstChar = name[0];
-      final lastChar = name[name.length - 1];
-      final obfuscated = '*' * (name.length - 2);
-      return '$firstChar$obfuscated$lastChar';
+      return name; // Não obfusca palavras muito curtas
     }
+    return split.map((word) {
+      if (split.first == word || split.last == word) {
+        final isFirst = split.first == word;
+        if (name.length > 10) {
+          final w =
+              isFirst ? word.substring(0, 2) : word.substring(word.length - 2);
+          final obfuscated = '*' * (word.length - 2);
+          return isFirst ? '$w$obfuscated' : '$obfuscated$w';
+        } else {
+          final w =
+              isFirst ? word.substring(0, 1) : word.substring(word.length - 1);
+          final obfuscated = '*' * (word.length - 1);
+          return isFirst ? '$w$obfuscated' : '$obfuscated$w';
+        }
+      } else {
+        return '*' * (word.length);
+      }
+    }).join(' ');
   }
 
   Color generateHighlightColor(Color tColor) {

@@ -2,8 +2,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:md_engine/md_engine.dart';
 
-import '../core/base/md_state.dart';
-
 class MdSelectFieldItem {
   final dynamic key;
   final String? text;

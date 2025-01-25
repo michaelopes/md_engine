@@ -162,7 +162,7 @@ class _MdTextFormFieldState extends MdState<MdTextFormField> {
       focusedBorder: theme.inputDecorationTheme.focusedBorder,
       disabledBorder: theme.inputDecorationTheme.disabledBorder,
       focusedErrorBorder: theme.inputDecorationTheme.focusedErrorBorder,
-      errorStyle: const TextStyle(height: 0),
+      errorStyle: const TextStyle(height: 0, fontSize: 0.001),
       hoverColor: Colors.transparent,
     );
   }
