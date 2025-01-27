@@ -111,7 +111,8 @@ class MdHttpDriverResponse {
     _failure = failure;
   }
 
-  bool get isSuccess => statusCode == 200 || statusCode == 201;
+  bool get isSuccess =>
+      statusCode == 200 || statusCode == 201 || statusCode == 204;
 
   Object makeFailure() {
     if (_failure != null) {
