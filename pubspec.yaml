@@ -38,6 +38,7 @@ dependencies:
   operance_datatable: ^1.0.7
   carousel_slider: ^5.0.0
   url_launcher: ^6.3.1
+  widgets_to_image: ^1.0.0
 
 dev_dependencies:
   flutter_test:

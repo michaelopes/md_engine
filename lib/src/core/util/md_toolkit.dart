@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:md_engine/md_engine.dart';
 
 import '../../widgets/md_icon.dart';
 
@@ -74,13 +75,28 @@ class MdToolkit {
         : name;
   }
 
+  String anonymizeDocument(String document) {
+    final sanitizedCpf = document.replaceAll(RegExp(r'\D'), '');
+
+    if (sanitizedCpf.length != 11) {
+      return document.length == 14
+          ? MdMasks.I.cnpj.maskText(document)
+          : document;
+    }
+
+    final anonymized =
+        '***.${sanitizedCpf.substring(3, 6)}.${sanitizedCpf.substring(6, 9)}-**';
+    return anonymized;
+  }
+
   String enumToString(Enum en, {bool withHyphen = false}) {
     var splited = en.toString().split(".");
     final result = splited.length > 1 ? splited[1] : splited[0];
     return withHyphen ? convertCase(result) : result;
   }
 
-  T? enumFromString<T extends Enum>(List<T> ens, String value) {
+  T? enumFromString<T extends Enum>(List<T> ens, String? value) {
+    if (value == null) return null;
     for (var item in ens) {
       if (enumToString(item) == value ||
           enumToString(item, withHyphen: true) == value) {
@@ -656,6 +672,18 @@ class MdToolkit {
             ? stringCrop("${splited.first} ${splited.last}", 15)
             : "${splited.first} ${splited.last}"
         : name;
+  }
+
+  DateTime resetTimeToMidnight(DateTime data) {
+    return DateTime(data.year, data.month, data.day);
+  }
+
+  bool isNumeric(String text) {
+    text = text.replaceAll(".", "").replaceAll(",", ".");
+    if (int.tryParse(text) != null || double.tryParse(text) != null) {
+      return true;
+    }
+    return false;
   }
 
   List<String> get brStates => [
