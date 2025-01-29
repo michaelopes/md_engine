@@ -5,9 +5,9 @@ import 'dart:math';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:md_engine/md_engine.dart';
 
 import '../../widgets/md_icon.dart';
+import 'md_masks.dart';
 
 typedef WhenCondition = bool Function();
 

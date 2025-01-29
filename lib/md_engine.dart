@@ -113,6 +113,7 @@ export 'src/widgets/md_rotatable.dart';
 export 'src/widgets/md_observer.dart';
 export 'src/widgets/md_title_value.dart';
 export 'src/widgets/md_divider.dart';
+export 'src/widgets/md_search_dialog.dart';
 
 import 'package:flutter/material.dart';
 import 'package:md_engine/src/core/i18n/app_translate.dart';

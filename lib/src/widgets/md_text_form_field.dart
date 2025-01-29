@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../md_engine.dart';
-import '../core/util/md_debouncer.dart';
 
 class MdTextAreaFormField extends MdTextFormField {
   MdTextAreaFormField({
@@ -357,6 +356,11 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
         }
         _isControllerListenerTrigged = true;
       }
+      _checkShowCleaner();
+      if (widget.validateOnType) {
+        _deboucer.value = _controller.text;
+      }
+      widget.onChanged?.call(_controller.text);
     });
     _focusNode.addListener(_focusNodeListener);
   }
@@ -641,13 +645,7 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
                             obscureText:
                                 widget.obscureText && !_passwordVisibile,
                             enabled: widget.enabled,
-                            onChanged: (value) {
-                              _checkShowCleaner();
-                              if (widget.validateOnType) {
-                                _deboucer.value = value;
-                              }
-                              widget.onChanged?.call(value);
-                            },
+
                             controller: _controller,
                             autofocus: widget.autoFocus,
                             keyboardType: widget.keyboardType,
