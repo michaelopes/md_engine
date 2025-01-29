@@ -3,6 +3,7 @@ export 'package:pretty_dio_logger/pretty_dio_logger.dart';
 export 'package:qlevar_router/qlevar_router.dart';
 export 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 export 'package:carousel_slider/carousel_slider.dart';
+export 'package:visibility_detector/visibility_detector.dart';
 
 export 'package:lottie/lottie.dart';
 export 'package:flutter_svg/flutter_svg.dart';

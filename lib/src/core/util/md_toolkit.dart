@@ -77,9 +77,8 @@ class MdToolkit {
 
   String anonymizeDocument(String document) {
     final sanitizedCpf = document.replaceAll(RegExp(r'\D'), '');
-
     if (sanitizedCpf.length != 11) {
-      return document.length == 14
+      return sanitizedCpf.length == 14
           ? MdMasks.I.cnpj.maskText(document)
           : document;
     }
@@ -87,6 +86,14 @@ class MdToolkit {
     final anonymized =
         '***.${sanitizedCpf.substring(3, 6)}.${sanitizedCpf.substring(6, 9)}-**';
     return anonymized;
+  }
+
+  String formatDocument(String document) {
+    final sanitizedCpf = document.replaceAll(RegExp(r'\D'), '');
+
+    return sanitizedCpf.length == 14
+        ? MdMasks.I.cnpj.maskText(document)
+        : MdMasks.I.cpf.maskText(document);
   }
 
   String enumToString(Enum en, {bool withHyphen = false}) {
