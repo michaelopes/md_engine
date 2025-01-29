@@ -1,25 +1,24 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:md_engine/md_engine.dart';
 
-import '../core/base/md_state.dart';
-
-class MDSelectFieldItem {
+class MdSelectFieldItem {
   final dynamic key;
   final String? text;
   final Widget? prefix;
 
-  MDSelectFieldItem({
+  MdSelectFieldItem({
     this.key,
     this.text,
     this.prefix,
   });
 }
 
-class MDSelectField extends StatefulWidget {
-  final List<MDSelectFieldItem?> items;
+class MdSelectField extends StatefulWidget {
+  final List<MdSelectFieldItem?> items;
   final int selectedIndex;
   final Function(
-    MDSelectFieldItem? item,
+    MdSelectFieldItem? item,
     int index,
   )? onChanged;
   final String? labeltext;
@@ -27,7 +26,7 @@ class MDSelectField extends StatefulWidget {
   final Widget? icon;
   final String? hintText;
 
-  const MDSelectField({
+  const MdSelectField({
     super.key,
     required this.items,
     required this.selectedIndex,
@@ -39,29 +38,56 @@ class MDSelectField extends StatefulWidget {
   });
 
   @override
-  State<MDSelectField> createState() => _MDSelectFieldState();
+  State<MdSelectField> createState() => _MdSelectFieldState();
 }
 
-class _MDSelectFieldState extends MdState<MDSelectField> {
+class _MdSelectFieldState extends MdState<MdSelectField> {
   @override
   void initState() {
     super.initState();
     selected = widget.items[widget.selectedIndex]!;
   }
 
-  late MDSelectFieldItem selected;
+  late MdSelectFieldItem selected;
 
   @override
-  void didUpdateWidget(covariant MDSelectField oldWidget) {
+  void didUpdateWidget(covariant MdSelectField oldWidget) {
     super.didUpdateWidget(oldWidget);
     selected = widget.items[widget.selectedIndex]!;
+  }
+
+  InputDecorationTheme get _baseInputDecoration => theme.inputDecorationTheme;
+
+  BorderRadius get _borderRadius {
+    if (_baseInputDecoration.enabledBorder?.isOutline ?? false) {
+      final b = _baseInputDecoration.enabledBorder as OutlineInputBorder;
+      return b.borderRadius;
+    }
+
+    return BorderRadius.circular(4);
+  }
+
+  Color get _borderColor {
+    if (_baseInputDecoration.enabledBorder != null) {
+      final b = _baseInputDecoration.enabledBorder!;
+      return b.borderSide.color;
+    }
+    return theme.colorScheme.primary;
+  }
+
+  double get _borderWidth {
+    if (_baseInputDecoration.enabledBorder != null) {
+      final b = _baseInputDecoration.enabledBorder!;
+      return b.borderSide.width;
+    }
+    return 1;
   }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, constraints) {
       return DropdownButtonHideUnderline(
-        child: DropdownButton2<MDSelectFieldItem>(
+        child: DropdownButton2<MdSelectFieldItem>(
           isExpanded: true,
           hint: widget.hintText == null
               ? null
@@ -89,18 +115,18 @@ class _MDSelectFieldState extends MdState<MDSelectField> {
                   ],
                 ),
           items: widget.items.map((item) {
-            return DropdownMenuItem<MDSelectFieldItem>(
+            return DropdownMenuItem<MdSelectFieldItem>(
               value: item,
               enabled: true,
               child: Text(
                 item!.text ?? "",
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: _baseInputDecoration.labelStyle,
                 overflow: TextOverflow.ellipsis,
               ),
             );
           }).toList(),
           value: selected,
-          onChanged: (MDSelectFieldItem? value) {
+          onChanged: (MdSelectFieldItem? value) {
             if (value != null) {
               setState(() {
                 selected = value;
@@ -109,14 +135,17 @@ class _MDSelectFieldState extends MdState<MDSelectField> {
             }
           },
           buttonStyleData: ButtonStyleData(
-            height: 52,
+            height: kDefaultMdTextFormFieldHeight,
             width: double.infinity,
             padding: const EdgeInsets.only(left: 8, right: 8),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: Theme.of(context).inputDecorationTheme.fillColor,
-            ),
-            elevation: 2,
+                borderRadius: _borderRadius,
+                color: _baseInputDecoration.fillColor,
+                border: Border.all(
+                  color: _borderColor,
+                  width: _borderWidth,
+                )),
+            elevation: 0,
           ),
           iconStyleData: IconStyleData(
             icon: const Icon(
@@ -129,11 +158,16 @@ class _MDSelectFieldState extends MdState<MDSelectField> {
           ),
           dropdownStyleData: DropdownStyleData(
             width: constraints.maxWidth > 200 ? constraints.biggest.width : 200,
+            maxHeight: 400,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: Theme.of(context).inputDecorationTheme.fillColor,
             ),
-            offset: const Offset(0, -4),
+
+            direction: DropdownDirection.left,
+            useRootNavigator: true,
+            useSafeArea: true,
+            //    offset: Offset(50, 0),
             scrollbarTheme: ScrollbarThemeData(
               radius: const Radius.circular(8),
               thickness: WidgetStateProperty.all(6),

@@ -11,12 +11,14 @@ class MdListNoItemsFound extends MdStateless {
     this.icon,
     this.showIcon = true,
     this.mainAxisAlignment = MainAxisAlignment.start,
+    this.showTitle = true,
   });
   final Widget? icon;
   final String? title;
   final String? message;
   final MainAxisAlignment mainAxisAlignment;
   final bool showIcon;
+  final bool showTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +30,17 @@ class MdListNoItemsFound extends MdStateless {
           SizedBox(
             child: icon,
           ),
+          const MdHeight(26),
+        ],
+        if (showTitle) ...[
+          Text(
+            title ?? tr.no_items_found.title(),
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
           const MdHeight(12),
         ],
-        Text(
-          title ?? tr.no_items_found.title(),
-          style: theme.textTheme.headlineSmall?.copyWith(
-            color: theme.colorScheme.onSurface,
-          ),
-        ),
-        const MdHeight(12),
         SizedBox(
           width: 300,
           child: Text(

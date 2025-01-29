@@ -38,6 +38,13 @@ final class MdWidgetElement extends ComponentElement {
   }
 
   @override
+  void update(MdStateless newWidget) {
+    super.update(newWidget);
+    assert(widget == newWidget);
+    rebuild(force: true);
+  }
+
+  @override
   Widget build() {
     _widget._refreshContext(this);
     return _widget.build(this);

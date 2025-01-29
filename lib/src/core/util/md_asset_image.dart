@@ -13,6 +13,10 @@ class MdAssetImage {
     this.fit,
   });
 
+  void precache(BuildContext context) {
+    precacheImage(AssetImage(fileName), context);
+  }
+
   Widget call({
     double? width,
     double? height,

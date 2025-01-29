@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../md_engine.dart';
-import '../core/util/md_debouncer.dart';
 
 class MdTextAreaFormField extends MdTextFormField {
   MdTextAreaFormField({
@@ -162,7 +161,7 @@ class _MdTextFormFieldState extends MdState<MdTextFormField> {
       focusedBorder: theme.inputDecorationTheme.focusedBorder,
       disabledBorder: theme.inputDecorationTheme.disabledBorder,
       focusedErrorBorder: theme.inputDecorationTheme.focusedErrorBorder,
-      errorStyle: const TextStyle(height: 0),
+      errorStyle: const TextStyle(height: 0, fontSize: 0.001),
       hoverColor: Colors.transparent,
     );
   }
@@ -357,21 +356,27 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
         }
         _isControllerListenerTrigged = true;
       }
+      _checkShowCleaner();
+      if (widget.validateOnType) {
+        _deboucer.value = _controller.text;
+      }
+      widget.onChanged?.call(_controller.text);
     });
     _focusNode.addListener(_focusNodeListener);
   }
 
   @override
   void didUpdateWidget(oldWidget) {
-    _setup();
     super.didUpdateWidget(oldWidget);
-    //_setup();
   }
 
   @override
   void reassemble() {
-    setState(() {
-      _hasFocus = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.unfocus();
+      setState(() {
+        _hasFocus = false;
+      });
     });
     super.reassemble();
   }
@@ -640,13 +645,7 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
                             obscureText:
                                 widget.obscureText && !_passwordVisibile,
                             enabled: widget.enabled,
-                            onChanged: (value) {
-                              _checkShowCleaner();
-                              if (widget.validateOnType) {
-                                _deboucer.value = value;
-                              }
-                              widget.onChanged?.call(value);
-                            },
+
                             controller: _controller,
                             autofocus: widget.autoFocus,
                             keyboardType: widget.keyboardType,
