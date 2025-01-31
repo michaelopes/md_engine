@@ -453,7 +453,7 @@ class MdToolkit {
     return to.difference(from).inDays;
   }
 
-  String ofuscateCPF(String cpf) {
+  String anonymizeCPF(String cpf) {
     final cpfS = cpf.split(".");
     return "${cpfS[0]}.***.***-${cpfS[cpfS.length - 1].split("-").last}";
   }

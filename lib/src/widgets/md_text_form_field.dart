@@ -356,11 +356,6 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
         }
         _isControllerListenerTrigged = true;
       }
-      _checkShowCleaner();
-      if (widget.validateOnType) {
-        _deboucer.value = _controller.text;
-      }
-      widget.onChanged?.call(_controller.text);
     });
     _focusNode.addListener(_focusNodeListener);
   }
@@ -645,7 +640,13 @@ class _MdTextFormFieldBackgroundFloatLabelState extends _MdTextFormFieldState {
                             obscureText:
                                 widget.obscureText && !_passwordVisibile,
                             enabled: widget.enabled,
-
+                            onChanged: (_) {
+                              _checkShowCleaner();
+                              if (widget.validateOnType) {
+                                _deboucer.value = _controller.text;
+                              }
+                              widget.onChanged?.call(_controller.text);
+                            },
                             controller: _controller,
                             autofocus: widget.autoFocus,
                             keyboardType: widget.keyboardType,

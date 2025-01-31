@@ -14,18 +14,21 @@ class MdSearchDialog<T> extends StatefulWidget {
     required this.firstPageKey,
     required this.fetchItems,
     required this.itemBuilder,
+    this.keyboardType,
   });
 
   final WidgetBuilder? noItemsEmptyState;
   final WidgetBuilder? indicador;
   final String? label;
-  final List<TextInputFormatter>? inputFormatters;
+  final List<({String key, TextInputFormatter formatter})> Function(
+      String value)? inputFormatters;
   final String? Function(String? value)? validator;
   final int firstPageKey;
   final int pageSize;
   final Future<List<T>> Function(String term, int pageKey, int pageSize)
       fetchItems;
   final Widget Function(T item, int index) itemBuilder;
+  final TextInputType? keyboardType;
 
   Future<dynamic> show(
     BuildContext context, {
@@ -57,6 +60,8 @@ class _MdSearchDialogState<T> extends MdState<MdSearchDialog<T>> {
 
   final _searchController = TextEditingController();
 
+  List<({String key, TextInputFormatter formatter})> _inputFormatters = [];
+
   final _formKey = GlobalKey<FormState>();
 
   late final _deboucer = MdDebouncer(
@@ -65,9 +70,7 @@ class _MdSearchDialogState<T> extends MdState<MdSearchDialog<T>> {
   );
 
   Future<void> _search(value) async {
-    if (_formKey.currentState?.validate() ?? false) {
-      _pagingController.refresh();
-    }
+    _pagingController.refresh();
   }
 
   @override
@@ -81,14 +84,19 @@ class _MdSearchDialogState<T> extends MdState<MdSearchDialog<T>> {
   Future<void> _fetchPage(int pageKey) async {
     try {
       var term = _searchController.text.trim();
-      final newItems = await widget.fetchItems(
-        term,
-        pageKey,
-        widget.pageSize,
-      );
-      if (mounted) {
-        FocusManager.instance.primaryFocus?.unfocus();
+      List<T> newItems = [];
+      if (_formKey.currentState?.validate() ?? false) {
+        newItems = await widget.fetchItems(
+          term,
+          pageKey,
+          widget.pageSize,
+        );
+
+        if (mounted) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
       }
+
       final isLastPage = newItems.length < widget.pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
@@ -105,6 +113,26 @@ class _MdSearchDialogState<T> extends MdState<MdSearchDialog<T>> {
 
   final _hasText = ValueNotifier(false);
 
+  void _processFormaters(
+      List<({String key, TextInputFormatter formatter})> inputFormatters) {
+    if (inputFormatters.length != _inputFormatters.length) {
+      setState(() {
+        _inputFormatters = inputFormatters;
+      });
+    } else {
+      for (var i = 0; i < _inputFormatters.length; i++) {
+        final f1 = _inputFormatters[i];
+        final f2 = inputFormatters[i];
+        if (f1.key != f2.key) {
+          setState(() {
+            _inputFormatters = inputFormatters;
+          });
+          break;
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,11 +146,17 @@ class _MdSearchDialogState<T> extends MdState<MdSearchDialog<T>> {
                   key: _formKey,
                   child: MdTextFormField(
                     focusNode: _focusNode,
+                    keyboardType: widget.keyboardType,
+                    wdKey: ValueKey("finder-$hashCode"),
                     controller: _searchController,
                     labelText: widget.label ?? tr.shared.search(),
-                    inputFormatters: widget.inputFormatters,
+                    inputFormatters:
+                        _inputFormatters.map((e) => e.formatter).toList(),
                     validator: widget.validator,
                     onChanged: (value) {
+                      final fts = widget.inputFormatters?.call(value) ?? [];
+                      _processFormaters(fts);
+
                       _hasText.value = value.isNotEmpty;
                       _deboucer.value = value;
                     },
