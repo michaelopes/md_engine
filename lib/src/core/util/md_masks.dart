@@ -25,6 +25,10 @@ class MdMasks {
         mask: '99.999.999/9999-99',
       );
 
+  TextInputMask get cpfCnpj => TextInputMask(
+        mask: ['999.999.999-99', '99.999.999/9999-99'],
+      );
+
   TextInputMask get cardNumber => TextInputMask(
         mask: '9999 9999 9999 9999',
       );
@@ -48,6 +52,6 @@ class MdMasks {
 extension TextInputMaskExt on TextInputMask {
   String maskText(String text, {bool ofuscate = false}) {
     final result = magicMask.getMaskedString(text);
-    return ofuscate ? MdToolkit.I.ofuscateCPF(result) : result;
+    return ofuscate ? MdToolkit.I.anonymizeCPF(result) : result;
   }
 }
