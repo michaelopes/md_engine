@@ -81,32 +81,47 @@ class _MdSearchDialogState<T> extends MdState<MdSearchDialog<T>> {
     super.initState();
   }
 
-  Future<void> _fetchPage(int pageKey) async {
-    try {
-      var term = _searchController.text.trim();
-      List<T> newItems = [];
-      if (_formKey.currentState?.validate() ?? false) {
-        newItems = await widget.fetchItems(
-          term,
-          pageKey,
-          widget.pageSize,
-        );
-
-        if (mounted) {
-          FocusManager.instance.primaryFocus?.unfocus();
-        }
-      }
-
-      final isLastPage = newItems.length < widget.pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        final nextPageKey = pageKey + 1;
-        _pagingController.appendPage(newItems, nextPageKey);
-      }
-    } catch (e) {
-      _pagingController.error = e;
+  void _conditionalFetchPage(VoidCallback callback) {
+    if (_formKey.currentState?.mounted ?? false) {
+      Future.delayed(Duration(milliseconds: 20), () {
+        callback();
+      });
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        callback();
+      });
     }
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    _conditionalFetchPage(() async {
+      try {
+        var term = _searchController.text.trim();
+        List<T> newItems = [];
+        if ((_formKey.currentState?.validate() ?? false) ||
+            widget.validator == null) {
+          newItems = await widget.fetchItems(
+            term,
+            pageKey,
+            widget.pageSize,
+          );
+
+          if (mounted) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          }
+        }
+
+        final isLastPage = newItems.length < widget.pageSize;
+        if (isLastPage) {
+          _pagingController.appendLastPage(newItems);
+        } else {
+          final nextPageKey = pageKey + 1;
+          _pagingController.appendPage(newItems, nextPageKey);
+        }
+      } catch (e) {
+        _pagingController.error = e;
+      }
+    });
   }
 
   final _focusNode = FocusNode();

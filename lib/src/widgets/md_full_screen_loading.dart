@@ -5,15 +5,24 @@ import 'package:md_engine/src/widgets/md_will_pop_scope.dart';
 class MdFullScreenLoading extends MdStateless {
   MdFullScreenLoading({super.key});
 
-  Future<void> show(BuildContext context) async {
+  static Future<void> show(BuildContext context) async {
     await showDialog(
       context: context,
       barrierDismissible: false,
       useRootNavigator: true,
+      routeSettings: RouteSettings(name: "modal-dialog"),
       builder: (_) {
-        return this;
+        return MdFullScreenLoading();
       },
     );
+  }
+
+  static void hide(context) {
+    final check = ModalRoute.isCurrentOf(context);
+    if (check == false) {
+      QR.back();
+      return hide(context);
+    }
   }
 
   @override
@@ -21,9 +30,9 @@ class MdFullScreenLoading extends MdStateless {
     return MdWillPopScope(
       onWillPop: () async => false,
       child: Material(
-        color: theme.dialogTheme.barrierColor,
+        color: theme.colorScheme.surface.withOpacity(.3),
         child: SizedBox.expand(
-          child: CircularProgressIndicator.adaptive(),
+          child: Center(child: CircularProgressIndicator.adaptive()),
         ),
       ),
     );

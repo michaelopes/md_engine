@@ -113,6 +113,25 @@ class MdToolkit {
     return null;
   }
 
+  double truncateToTwoDecimals(double value) {
+    return (value * 100).truncateToDouble() / 100;
+  }
+
+  double truncateOrRound(double valor) {
+    String valorStr =
+        valor.toStringAsFixed(12); // Garante precisão para análise
+    List<String> partes = valorStr.split('.');
+
+    if (partes.length > 1 && partes[1].length > 2) {
+      String decimais = partes[1];
+      if (decimais.length > 1 && decimais[1] == '9') {
+        return double.parse(valor.toStringAsFixed(1));
+      }
+    }
+
+    return truncateToTwoDecimals(valor);
+  }
+
   String convertCase(String input) {
     if (input.contains('-')) {
       return input.split('-').map((word) {
@@ -461,12 +480,16 @@ class MdToolkit {
   double dynamicToDouble(dynamic value) {
     if (value is int) {
       return value.toDouble();
-    } else if (value is String) {
-      return double.parse(value);
-    } else if (value == null) {
+    } else if (value is String && value.isNotEmpty) {
+      return double.parse(value.replaceAll(".", "").replaceAll(",", "."));
+    } else if (value == null || value == "") {
       return 0;
     }
     return value;
+  }
+
+  double toDoublePrecision(double value, {int precision = 2}) {
+    return double.parse(value.toStringAsFixed(precision));
   }
 
   double? dynamicToDoubleNullable(dynamic value) {
