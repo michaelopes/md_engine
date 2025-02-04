@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:md_engine/md_engine.dart';
 import 'package:md_engine/src/core/i18n/app_translate.dart';
 
 import '../helpers/md_responsive_metrics.dart';
@@ -21,5 +22,15 @@ extension StringTrExt on String {
 extension ListMdSubRouteExt on List<MdRoute> {
   MdRoute byName(String name) {
     return where((e) => e.config.name == name).first;
+  }
+}
+
+extension QRContextExt on QRContext {
+  void popAllUntilThis(BuildContext context) {
+    final isCurrent = ModalRoute.isCurrentOf(context);
+    if (isCurrent == false) {
+      QR.back();
+      return popAllUntilThis(context);
+    }
   }
 }

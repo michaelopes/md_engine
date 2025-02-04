@@ -31,6 +31,7 @@ export './src/core/base/md_service.dart';
 export './src/core/base/md_state.dart';
 export './src/core/base/md_widget_state.dart';
 export './src/core/base/md_stateless.dart';
+export './src/core/base/md_statefull_dialog.dart';
 
 export './src/core/helpers/error_object.dart';
 export './src/core/helpers/global_error_observer.dart';
@@ -117,6 +118,7 @@ export 'src/widgets/md_divider.dart';
 export 'src/widgets/md_search_dialog.dart';
 export 'src/widgets/md_number_selection.dart';
 export 'src/widgets/md_full_screen_loading.dart';
+export 'src/widgets/md_timer_bar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:md_engine/src/core/i18n/app_translate.dart';
