@@ -69,6 +69,7 @@ export 'src/collections/md_set.dart';
 
 export 'src/core/util/md_asset_icon.dart';
 export 'src/core/util/md_asset_image.dart';
+export 'src/core/util/md_asset_animation.dart';
 
 export 'src/core/validator/md_field_validator.dart';
 export 'src/core/validator/md_validator.dart';

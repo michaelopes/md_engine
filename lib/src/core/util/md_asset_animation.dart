@@ -7,7 +7,7 @@ class MdAssetAnimation {
   final double? height;
   final BoxFit? fit;
 
-  MdAssetAnimation({
+  const MdAssetAnimation({
     required this.fileName,
     this.width,
     this.height,
