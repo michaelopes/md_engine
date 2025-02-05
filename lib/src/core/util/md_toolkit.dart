@@ -132,6 +132,10 @@ class MdToolkit {
     return truncateToTwoDecimals(valor);
   }
 
+  double sumPercentageOnValue(double value, percentage) {
+    return value + (value * (percentage / 100));
+  }
+
   String convertCase(String input) {
     if (input.contains('-')) {
       return input.split('-').map((word) {
