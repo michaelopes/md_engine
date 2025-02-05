@@ -14,6 +14,10 @@ class MdAssetAnimation {
     this.fit,
   });
 
+  void precache(BuildContext context) {
+    AssetLottie(fileName).load();
+  }
+
   Widget call({
     Animation<double>? controller,
     void Function(Duration)? onLoaded,
