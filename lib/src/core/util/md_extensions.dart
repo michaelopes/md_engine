@@ -3,7 +3,6 @@ import 'package:md_engine/md_engine.dart';
 import 'package:md_engine/src/core/i18n/app_translate.dart';
 
 import '../helpers/md_responsive_metrics.dart';
-import 'md_sub_route.dart';
 
 extension MdResponsiveMetricsExt on BuildContext {
   MdResponsiveMetrics get metrics => MdResponsiveMetrics.of(this);
