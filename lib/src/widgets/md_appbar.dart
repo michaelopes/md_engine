@@ -198,7 +198,7 @@ class _MdAppBarState extends MdState<MdAppBar> {
           height: 36,
           width: 36,
           margin: _isOriginal
-              ? const EdgeInsets.only(left: 20, top: 4, bottom: 6)
+              ? const EdgeInsets.only(left: 14, top: 4, bottom: 6)
               : EdgeInsets.zero,
           child: Icon(
             Icons.close,

@@ -11,19 +11,22 @@ class MdDelegate extends QRouterDelegate {
     List<NavigatorObserver>? observers,
     super.restorationScopeId,
   }) : super(observers: observers ?? []) {
+    super.observers.clear();
     this.observers.add(_DelegateObserver(
       onChangeRoute: ((route) {
-        currentRoute = route;
+        _currentRoute = route;
       }),
     ));
   }
 
-  Route<dynamic>? currentRoute;
+  static Route<dynamic>? _currentRoute;
+
+  static bool get isCurrentRouteDialog => _currentRoute is PopupRoute;
 
   @override
   Future<bool> popRoute() async {
-    if (currentRoute != null) {
-      final willPopResult = currentRoute?.popDisposition;
+    if (_currentRoute != null) {
+      final willPopResult = _currentRoute?.popDisposition;
       if (willPopResult == RoutePopDisposition.pop) {
         return super.popRoute();
       } else {

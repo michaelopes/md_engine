@@ -30,11 +30,11 @@ class MdMasks {
       );
 
   TextInputMask get cardNumber => TextInputMask(
-        mask: '9999 9999 9999 9999',
+        mask: ['9999 999 999 99999', '9999 9999 9999 9999'],
       );
 
   TextInputMask get cardNumberOfusqued => TextInputMask(
-        mask: '9999 XXXX XXXX 9999',
+        mask: ['9999 XXX XXXX X999', "9999 XXXX XXXX 9999"],
       );
 
   TextInputMask get cardExpiringDate => TextInputMask(

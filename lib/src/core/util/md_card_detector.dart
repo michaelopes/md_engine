@@ -37,7 +37,7 @@ Map<Brand, Set<List<String>>> numberPatterns = <Brand, Set<List<String>>>{
   Brand.visa: <List<String>>{
     <String>['4'],
   },
-  Brand.americanExpress: <List<String>>{
+  Brand.amex: <List<String>>{
     <String>['34'],
     <String>['37'],
   },
@@ -73,7 +73,7 @@ enum Brand {
   otherBrand,
   mastercard,
   visa,
-  americanExpress,
+  amex,
   discover,
   elo,
 }

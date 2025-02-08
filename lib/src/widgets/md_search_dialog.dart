@@ -176,7 +176,7 @@ class _MdSearchDialogState<T> extends MdState<MdSearchDialog<T>> {
                       _deboucer.value = value;
                     },
                     prefixIcon: InkWell(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () => QR.back(),
                       child: Container(
                         color: Colors.transparent,
                         child: Icon(Icons.arrow_back),

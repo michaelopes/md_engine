@@ -7,6 +7,9 @@ class MdAssetIcon {
   final double? height;
   final BoxFit? fit;
   final Color? color;
+  final bool package;
+
+  final _pathEngine = "packages/md_engine/lib/icons";
 
   const MdAssetIcon({
     required this.fileName,
@@ -14,6 +17,7 @@ class MdAssetIcon {
     this.height,
     this.fit,
     this.color,
+    this.package = false,
   });
 
   MdIcn call({double? width, double? height, BoxFit? fit, Color? color}) {
@@ -22,7 +26,7 @@ class MdAssetIcon {
       fit: fit,
       height: height,
       width: width,
-      icon: fileName,
+      icon: package ? "$_pathEngine/$fileName" : fileName,
     );
   }
 }

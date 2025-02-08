@@ -53,7 +53,7 @@ class GlobalErrorObserver {
             : null,
         marginBottom: error.reason.isEmpty ? 16 : 0,
         onTap: () {
-          Navigator.of(ctx).pop();
+          QR.back();
           onBack?.call(error);
         },
         // ignore: use_build_context_synchronously
@@ -75,7 +75,8 @@ class GlobalErrorObserver {
         ),
         marginBottom: 0,
         onTap: () {
-          Navigator.of(ctx).pop();
+          QR.back();
+
           onBack?.call(error);
         },
         // ignore: use_build_context_synchronously
@@ -97,7 +98,8 @@ class GlobalErrorObserver {
         ),
         marginBottom: 0,
         onTap: () {
-          Navigator.of(ctx).pop();
+          QR.back();
+
           onBack?.call(error);
         },
         // ignore: use_build_context_synchronously
@@ -120,7 +122,8 @@ class GlobalErrorObserver {
         ),
         marginBottom: 0,
         onTap: () {
-          Navigator.of(ctx).pop();
+          QR.back();
+
           onBack?.call(error);
         },
       ).show(QR.context!);

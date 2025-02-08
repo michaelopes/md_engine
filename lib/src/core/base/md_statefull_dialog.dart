@@ -31,7 +31,7 @@ abstract class MdStatefullDialog extends StatefulWidget {
     );
   }
 
-  void hide(BuildContext context) {
-    QR.popAllUntilThis(context);
+  void hide(BuildContext context) async {
+    await QR.popAllUntilThis(context);
   }
 }

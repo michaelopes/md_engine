@@ -25,6 +25,7 @@ export 'package:url_launcher/url_launcher.dart';
 export 'package:widgets_to_image/widgets_to_image.dart';
 
 export './src/md_app.dart';
+export './src/md_payment_icons.dart';
 
 //OWN IMPORTS
 export './src/core/base/md_service.dart';
