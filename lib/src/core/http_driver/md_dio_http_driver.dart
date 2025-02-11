@@ -28,6 +28,8 @@ class MdDioHttpDriver implements IMdHttpDriver {
 
   Dio get dio => _DioFactory.instance;
 
+  bool _enableLog = true;
+
   void _setConfig() {
     dio.options.baseUrl = baseUrl ?? MdApp.I.httpDriverOptions.baseUrl();
     dio.options.headers.addAll(
@@ -48,6 +50,9 @@ class MdDioHttpDriver implements IMdHttpDriver {
             error: true,
             compact: true,
             maxWidth: 90,
+            filter: (options, args) {
+              return _enableLog;
+            },
           )
       ],
     );
@@ -95,13 +100,18 @@ class MdDioHttpDriver implements IMdHttpDriver {
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
+    String mineType = 'image/png',
   }) async {
-    dio.options.headers['content-type'] = 'image/png';
+    _enableLog = false;
+    dio.options.headers['content-type'] = mineType;
     return await interceptRequests(
       dio.get(
         path,
         queryParameters: queryParameters,
-        options: options,
+        options: options?.copyWith(
+              responseType: ResponseType.bytes,
+            ) ??
+            Options(responseType: ResponseType.bytes),
       ),
     );
   }
@@ -187,6 +197,7 @@ class MdDioHttpDriver implements IMdHttpDriver {
 
   @override
   void resetContentType() {
+    _enableLog = true;
     dio.options.headers['content-type'] = 'application/json; charset=utf-8';
   }
 
