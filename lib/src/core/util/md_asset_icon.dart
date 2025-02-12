@@ -9,7 +9,7 @@ class MdAssetIcon {
   final Color? color;
   final bool package;
 
-  final _pathEngine = "packages/md_engine/lib/icons";
+  final _pathEngine = "packages/md_engine/assets/icons";
 
   const MdAssetIcon({
     required this.fileName,

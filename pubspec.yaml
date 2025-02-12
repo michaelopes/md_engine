@@ -51,9 +51,9 @@ executables:
 
 flutter:
   assets:
-   - lib/i18n/
-   - lib/icons/
-   - lib/icons/cards/
+   - assets/i18n/
+   - assets/icons/
+   - assets/icons/cards/
   #   - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see

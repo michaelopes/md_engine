@@ -9,7 +9,7 @@ class I18n {
 
   static final I18n I = I18n._internal();
 
-  static const _packageI18nPath = 'packages/md_engine/lib/i18n/';
+  static const _packageI18nPath = 'packages/md_engine/assets/i18n/';
 
   final List<String> availableLanguages = <String>[];
   late final Locale defaultLocale;
