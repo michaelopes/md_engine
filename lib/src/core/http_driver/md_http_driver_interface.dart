@@ -57,6 +57,7 @@ abstract class IMdHttpDriver {
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
+    String mineType = 'image/png',
   });
 
   void resetContentType();
