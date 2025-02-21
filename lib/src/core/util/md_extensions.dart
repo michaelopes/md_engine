@@ -29,6 +29,12 @@ extension EnumExt on Enum {
   String get text {
     return MdToolkit.I.enumToString(this).replaceAll("nnew", "new");
   }
+
+  String get textUnderscoreCase {
+    return MdToolkit.I.camelToUnderscore(
+      MdToolkit.I.enumToString(this).replaceAll("nnew", "new"),
+    );
+  }
 }
 
 extension EnumValuesExt on List<Enum> {

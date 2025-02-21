@@ -34,7 +34,7 @@ class MdBottomSheet extends MdStateless {
             Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: theme.bottomSheetTheme.backgroundColor,
+                color: theme.bottomSheetTheme.modalBackgroundColor,
               ),
               constraints: BoxConstraints(
                 minHeight: minHeight,
@@ -43,7 +43,7 @@ class MdBottomSheet extends MdStateless {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: 24, right: 24, top: 32, bottom: 12),
+                        left: 24, right: 24, top: 32, bottom: 8),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Stack(
@@ -60,17 +60,22 @@ class MdBottomSheet extends MdStateless {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   if (title.isNotEmpty) ...[
+                                    const MdHeight(4),
                                     Text(
                                       title,
-                                      style: theme.textTheme.titleLarge,
+                                      style:
+                                          theme.textTheme.labelLarge?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                    const MdHeight(8),
                                   ],
-                                  if (message.isNotEmpty)
+                                  if (message.isNotEmpty) ...[
+                                    const MdHeight(8),
                                     Text(
                                       message,
                                       style: theme.textTheme.bodyLarge,
                                     ),
+                                  ]
                                 ],
                               ),
                             ),
@@ -95,11 +100,11 @@ class MdBottomSheet extends MdStateless {
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 12, horizontal: 24)
-                            .copyWith(bottom: 32),
+                    padding: const EdgeInsets.symmetric(horizontal: 24)
+                        .copyWith(top: title.isEmpty ? 8 : 0)
+                        .copyWith(bottom: 32),
                     child: child,
-                  ),
+                  )
                 ],
               ),
             )
