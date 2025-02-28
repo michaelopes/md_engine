@@ -66,6 +66,34 @@ class MdToolkit {
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 
+  String convertMapToString(
+    Map<String, dynamic> map, {
+    String startSymbol = "{",
+    String endSymbol = "}",
+    String recusiveKeySymbol = ":",
+  }) {
+    // Usando um StringBuffer para construir a string de forma eficiente
+    StringBuffer buffer = StringBuffer();
+    buffer.write(startSymbol);
+
+    map.forEach((key, value) {
+      if (value is Map<String, dynamic>) {
+        buffer.write(
+            '$key$recusiveKeySymbol ${convertMapToString(value, startSymbol: "{", endSymbol: "}")}, ');
+      } else {
+        final val = isNumeric(value) ? value : '"$value"';
+        buffer.write('$key: $val, ');
+      }
+    });
+
+    String result = buffer.toString();
+    result = result.substring(
+        0, result.length - 2); // Remove a última vírgula e espaço
+    result += endSymbol;
+
+    return result;
+  }
+
   String formatName(String name, {bool withCrop = false}) {
     var splited = name.trim().replaceAll("  ", "").split(" ");
     return splited.length > 1
@@ -234,6 +262,11 @@ class MdToolkit {
   String formatBrDatetime(DateTime date) {
     var format = DateFormat("dd/MM/yyyy HH:mm", "pt_BR");
     return format.format(date);
+  }
+
+  DateTime convertBrDateStrToDateTime(String brStrDate) {
+    var formated = brDatetime2IsoDatetime(brStrDate);
+    return DateTime.parse(formated);
   }
 
   String getSemantcDayAndMonth() {
@@ -666,14 +699,14 @@ class MdToolkit {
 
   String brDatetime2IsoDatetime(
     String brDate, {
-    String? timePreposition,
+    String timePreposition = " ",
   }) {
     var split1 = brDate.split(" ");
     String date = "";
-    String time = "";
+    String time = "${timePreposition}00:00:00Z";
     if (split1.length > 1) {
       date = split1[0];
-      time = (timePreposition ?? " ") + split1[1].substring(0, 5);
+      time = timePreposition  + split1[1].substring(0, 5);
     } else {
       date = brDate;
     }
@@ -713,8 +746,8 @@ class MdToolkit {
     return DateTime(data.year, data.month, data.day);
   }
 
-  bool isNumeric(String text) {
-    text = text.replaceAll(".", "").replaceAll(",", ".");
+  bool isNumeric(Object value) {
+    final text = value.toString().replaceAll(".", "").replaceAll(",", ".");
     if (int.tryParse(text) != null || double.tryParse(text) != null) {
       return true;
     }
