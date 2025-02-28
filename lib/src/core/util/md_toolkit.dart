@@ -71,7 +71,21 @@ class MdToolkit {
     String startSymbol = "{",
     String endSymbol = "}",
     String recusiveKeySymbol = ":",
+    bool withoutQuotationMarks = false,
   }) {
+    Object getVal(Object value) {
+      if (isNumeric(value) || withoutQuotationMarks) {
+        return value;
+      } else if (value is List) {
+        final lst = value.map((e) => getVal(e)).join(", ");
+        return "[$lst]";
+      } else if (value is Map) {
+        return convertMapToString(Map<String, dynamic>.from(value));
+      } else {
+        return '"$value"';
+      }
+    }
+
     // Usando um StringBuffer para construir a string de forma eficiente
     StringBuffer buffer = StringBuffer();
     buffer.write(startSymbol);
@@ -81,7 +95,7 @@ class MdToolkit {
         buffer.write(
             '$key$recusiveKeySymbol ${convertMapToString(value, startSymbol: "{", endSymbol: "}")}, ');
       } else {
-        final val = isNumeric(value) ? value : '"$value"';
+        final val = getVal(value);
         buffer.write('$key: $val, ');
       }
     });
@@ -706,7 +720,7 @@ class MdToolkit {
     String time = "${timePreposition}00:00:00Z";
     if (split1.length > 1) {
       date = split1[0];
-      time = timePreposition  + split1[1].substring(0, 5);
+      time = timePreposition + split1[1].substring(0, 5);
     } else {
       date = brDate;
     }
