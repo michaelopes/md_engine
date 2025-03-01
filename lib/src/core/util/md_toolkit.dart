@@ -763,7 +763,7 @@ class MdToolkit {
   bool isNumeric(Object value) {
     final text = value.toString().replaceAll(".", "").replaceAll(",", ".");
     if (int.tryParse(text) != null || double.tryParse(text) != null) {
-      return true;
+      return value is num;
     }
     return false;
   }
