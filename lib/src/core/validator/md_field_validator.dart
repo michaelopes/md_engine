@@ -38,7 +38,8 @@ enum MdValidateTypes {
   dribbble,
   github,
   date,
-  dateGreaterThanNow
+  dateGreaterThanNow,
+  hex32,
 }
 
 class MdValidateRule {
@@ -435,6 +436,15 @@ class MdFieldValidator {
             if (!MdValidator.isDateGreaterThanNow(value)) {
               result = AppTranslate.tr(
                   "validador.invalid_date_greater_than_now", context);
+            } else {
+              result = null;
+            }
+            break;
+          }
+        case MdValidateTypes.hex32:
+          {
+            if (!MdValidator.isHex32Valid(value)) {
+              result = AppTranslate.tr("validador.invalid_hex_32", context);
             } else {
               result = null;
             }

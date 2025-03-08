@@ -64,7 +64,8 @@
         "verification_code": "Código de verificação inválido",
         "invalid_cep": "CEP inválido",
         "invalid_date": "Data inválida",
-        "invalid_date_greater_than_now": "Data informada deve ser maior que hoje"
+        "invalid_date_greater_than_now": "Data informada deve ser maior que hoje",
+        "invalid_hex_32": "Código informado é inválido"
     },
     "no_items_found": {
         "title": "Nenhum resultado",

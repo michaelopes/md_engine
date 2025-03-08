@@ -209,4 +209,9 @@ class MdValidator {
       return false;
     }
   }
+
+  static bool isHex32Valid(String value) {
+    final regex = RegExp(r'^[a-f0-9]{32}$');
+    return regex.hasMatch(value);
+  }
 }
