@@ -138,17 +138,17 @@ class MdToolkit {
         : MdMasks.I.cpf.maskText(document);
   }
 
-  String enumToString(Enum en, {bool withHyphen = false}) {
+  String enumToString(Enum en, {bool withUnderscore = false}) {
     var splited = en.toString().split(".");
     final result = splited.length > 1 ? splited[1] : splited[0];
-    return withHyphen ? convertCase(result) : result;
+    return withUnderscore ? camelToUnderscore(result) : result;
   }
 
   T? enumFromString<T extends Enum>(List<T> ens, String? value) {
     if (value == null) return null;
     for (var item in ens) {
       if (enumToString(item) == value ||
-          enumToString(item, withHyphen: true) == value) {
+          enumToString(item, withUnderscore: true) == value) {
         return item;
       }
     }

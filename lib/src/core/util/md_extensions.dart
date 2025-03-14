@@ -45,15 +45,18 @@ extension EnumValuesExt on List<Enum> {
 }
 
 extension QRContextExt on QRContext {
+  bool get hasOpenedDialog {
+    return MdDelegate.isCurrentRouteDialog;
+  }
+
   Future<void> popAllUntilThis(BuildContext context) async {
+    if (!context.mounted) return;
     final isCurrent = ModalRoute.isCurrentOf(context);
     if (isCurrent == false) {
       await QR.back();
       return await popAllUntilThis(context);
     }
   }
-
-  //Future<void> replaceAll(String path) async {}
 
   Future<bool> popUntil(String target, [dynamic result]) async {
     if (target.isEmpty) return false;
@@ -68,8 +71,12 @@ extension QRContextExt on QRContext {
       final c1 = rootRouteName == currentRouteName;
       final c2 = currentRouteName == routeTarget;
       if (!c1 && !c2 && !isDialogOpen) {
+        final beforeEntriesLength = entries.length;
         await QR.navigator.removeLast(result: result);
-        return await popUntil(target, result);
+        final afterEntriesLength = (QR.history.entries.length - 1);
+        if (beforeEntriesLength > afterEntriesLength) {
+          return await popUntil(target, result);
+        }
       } else if (isDialogOpen) {
         Navigator.pop(QR.context!);
         await Future.delayed(Duration(milliseconds: 10));

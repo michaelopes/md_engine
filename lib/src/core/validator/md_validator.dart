@@ -214,4 +214,13 @@ class MdValidator {
     final regex = RegExp(r'^[a-f0-9]{32}$');
     return regex.hasMatch(value);
   }
+
+  static bool isEMVPix(String input) {
+    if (input.isEmpty || input.length < 10) return false;
+
+    input = input.toLowerCase();
+    return input.length >= 100 &&
+        input.contains('br.gov.bcb.pix') &&
+        input.startsWith(RegExp(r'^[0-9]'));
+  }
 }

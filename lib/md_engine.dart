@@ -122,6 +122,7 @@ export 'src/widgets/md_search_dialog.dart';
 export 'src/widgets/md_number_selection.dart';
 export 'src/widgets/md_full_screen_loading.dart';
 export 'src/widgets/md_timer_bar.dart';
+export 'src/widgets/md_alert.dart';
 
 import 'package:flutter/material.dart';
 import 'package:md_engine/src/core/i18n/app_translate.dart';

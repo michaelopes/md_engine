@@ -12,9 +12,13 @@ class MdDebouncer<T> {
   Timer? _timer;
   T? get value => _value;
   set value(T? val) {
+    if (_value == val) return;
     _value = val;
     _timer?.cancel();
-    _timer = Timer(duration, () => onValue(_value));
+    _timer = Timer(duration, () {
+      onValue(_value);
+      _value = null;
+    });
   }
 
   void cancel() {
