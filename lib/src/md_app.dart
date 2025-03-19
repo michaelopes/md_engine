@@ -47,6 +47,11 @@ class MdApp {
     packageName = packageInfo.packageName;
   }
 
+  static late __MdAppState _state;
+  static void refresh({bool resetRoutes = false}) {
+    _state.refresh();
+  }
+
   Future<void> run({
     required MdHttpDriverOptions httpDriverOptions,
     Flavor flavor = Flavor.unknow,
@@ -241,19 +246,44 @@ class _MdApp extends StatefulWidget {
     this.enableProativeState = true,
     this.errorListener,
   });
+
   @override
   State<_MdApp> createState() => __MdAppState();
 }
 
 class __MdAppState extends State<_MdApp> {
+  late final theme = widget.theme ?? ThemeData.light(useMaterial3: true);
   @override
   void initState() {
+    QR.settings.initPage = Material(
+      color: theme.colorScheme.surface,
+      child: Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
+    );
     super.initState();
+    MdApp._state = this;
     if (widget.enableProativeState) {
       MdStateEngine.I.start();
     }
     if (widget.errorListener != null) {
       GlobalErrorObserver.listen = widget.errorListener!;
+    }
+  }
+
+  void refresh({bool resetRoutes = false}) {
+    if (context.mounted) {
+      setState(() {
+        routerDelegate = MdDelegate(
+          widget.routes,
+          navKey: widget.navigatorKey,
+          observers: widget.navigatorObservers,
+          initPath: widget.initRoutePath,
+        );
+        if (resetRoutes) {
+          QR.replaceAll(routerDelegate.initPath ?? "/");
+        }
+      });
     }
   }
 
@@ -264,7 +294,7 @@ class __MdAppState extends State<_MdApp> {
     super.dispose();
   }
 
-  late final routerDelegate = MdDelegate(
+  late MdDelegate routerDelegate = MdDelegate(
     widget.routes,
     navKey: widget.navigatorKey,
     observers: widget.navigatorObservers,
@@ -300,7 +330,7 @@ class __MdAppState extends State<_MdApp> {
       themeAnimationDuration: widget.themeAnimationDuration,
       themeMode: widget.themeMode,
       title: F.title,
-      theme: widget.theme ?? ThemeData.light(useMaterial3: true),
+      theme: theme,
       supportedLocales: widget.enableI18n
           ? I18n.I.supportedLocales
           : const <Locale>[Locale('en', 'US')],

@@ -53,6 +53,7 @@ export 'src/core/util/md_operance_data_controller.dart';
 export 'src/core/util/md_memory_cache.dart';
 export 'src/core/util/md_card_detector.dart';
 export 'src/core/util/md_debouncer.dart';
+export 'src/core/util/md_string.dart';
 
 export 'src/core/viewmodel/md_viewmodel.dart';
 export 'src/core/viewmodel/md_viewmodel_state.dart';

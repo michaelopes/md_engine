@@ -8,7 +8,7 @@ class MdButton extends StatefulWidget {
   const MdButton({
     super.key,
     this.onPressed,
-    required this.text,
+    this.text = "",
     this.icon,
     this.outline = false,
     this.style,
@@ -57,18 +57,19 @@ class _MdButtonState extends MdState<MdButton> {
             children: [
               if (icon != null && widget.iconType == MdButtonIconType.prefix)
                 Padding(
-                  padding: const EdgeInsets.only(right: 6),
+                  padding: EdgeInsets.only(right: widget.text.isEmpty ? 0 : 6),
                   child: icon,
                 ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 2),
-                child: Text(
-                  widget.text,
+              if (widget.text.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: Text(
+                    widget.text,
+                  ),
                 ),
-              ),
               if (icon != null && widget.iconType == MdButtonIconType.suffix)
                 Padding(
-                  padding: const EdgeInsets.only(left: 6),
+                  padding: EdgeInsets.only(right: widget.text.isEmpty ? 0 : 6),
                   child: icon,
                 ),
             ],

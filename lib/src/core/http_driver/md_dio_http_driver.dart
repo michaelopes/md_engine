@@ -10,53 +10,64 @@ import 'md_http_driver_interface.dart';
 import 'md_http_driver_interceptor.dart';
 import 'md_http_driver_response_parser.dart';
 
+typedef _DioFactoryConfig = void Function(Dio dio);
+
 class _DioFactory {
-  static Dio? _dio;
-  static Dio get instance {
-    _dio ??= Dio();
-    return _dio!;
+  _DioFactory._intenal();
+  static final I = _DioFactory._intenal();
+
+  final _storage = <String, Dio>{};
+
+  Dio getDio(String baseUrl, {required _DioFactoryConfig onConfig}) {
+    if (!_storage.containsKey(baseUrl)) {
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: baseUrl,
+        ),
+      );
+      onConfig(dio);
+      _storage[baseUrl] = dio;
+    }
+    return _storage[baseUrl]!;
   }
 }
 
 class MdDioHttpDriver implements IMdHttpDriver {
   String? baseUrl;
-  MdDioHttpDriver({
-    this.baseUrl,
-  }) {
-    _setConfig();
-  }
-
-  Dio get dio => _DioFactory.instance;
-
-  bool _enableLog = true;
-
-  void _setConfig() {
-    dio.options.baseUrl = baseUrl ?? MdApp.I.httpDriverOptions.baseUrl();
-    dio.options.headers.addAll(
-      {
-        'content-type': "application/json; charset=utf-8",
+  late final Dio dio;
+  MdDioHttpDriver({this.baseUrl, List<Interceptor> interceptors = const []}) {
+    dio = _DioFactory.I.getDio(
+      baseUrl ?? MdApp.I.httpDriverOptions.baseUrl(),
+      onConfig: (dio) {
+        dio.options.headers.addAll(
+          {
+            'content-type': "application/json; charset=utf-8",
+          },
+        );
+        dio.interceptors.addAll(
+          [
+            ...interceptors,
+            MdHttpDriverInterceptor(dio),
+            MdApp.I.httpDriverOptions.middleware..setHttpDriver(this),
+            if (MdApp.I.httpDriverOptions.enableLogger)
+              PrettyDioLogger(
+                requestHeader: true,
+                requestBody: true,
+                responseBody: true,
+                responseHeader: false,
+                error: true,
+                compact: true,
+                maxWidth: 90,
+                filter: (options, args) {
+                  return _enableLog;
+                },
+              )
+          ],
+        );
       },
     );
-    dio.interceptors.addAll(
-      [
-        MdHttpDriverInterceptor(dio),
-        MdApp.I.httpDriverOptions.middleware..setHttpDriver(this),
-        if (MdApp.I.httpDriverOptions.enableLogger)
-          PrettyDioLogger(
-            requestHeader: true,
-            requestBody: true,
-            responseBody: true,
-            responseHeader: false,
-            error: true,
-            compact: true,
-            maxWidth: 90,
-            filter: (options, args) {
-              return _enableLog;
-            },
-          )
-      ],
-    );
   }
+  bool _enableLog = true;
 
   @override
   Future<MdHttpDriverResponse> interceptRequests(Future request) async {
