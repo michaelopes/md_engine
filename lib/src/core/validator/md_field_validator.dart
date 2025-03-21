@@ -296,6 +296,9 @@ class MdFieldValidator {
           }
         case MdValidateTypes.maxAge:
           {
+            if (value.contains("/")) {
+              value = MdToolkit.I.brDatetime2IsoDatetime(value);
+            }
             var date = DateTime.tryParse(value);
             var val = date != null
                 ? (DateTime.now().difference(date).inDays / 365).floor()
@@ -312,6 +315,9 @@ class MdFieldValidator {
           }
         case MdValidateTypes.minAge:
           {
+            if (value.contains("/")) {
+              value = MdToolkit.I.brDatetime2IsoDatetime(value);
+            }
             var date = DateTime.tryParse(value);
             var val = date != null
                 ? (DateTime.now().difference(date).inDays / 365).floor()

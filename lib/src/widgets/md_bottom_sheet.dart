@@ -73,7 +73,7 @@ class MdBottomSheet extends MdStateless {
                                     const MdHeight(8),
                                     Text(
                                       message,
-                                      style: theme.textTheme.bodyLarge,
+                                      style: theme.textTheme.bodyMedium,
                                     ),
                                   ]
                                 ],
