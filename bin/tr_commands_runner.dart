@@ -91,7 +91,7 @@ class Generator {
     generate(json);
 
     mainBuffer.writeln();
-    mainBuffer.writeln('final Tr =  MdI18n(MdApp.context);');
+    mainBuffer.writeln('final tr =  MdI18n(MdApp.context);');
     mainBuffer.writeln();
 
     return mainBuffer.toString();
