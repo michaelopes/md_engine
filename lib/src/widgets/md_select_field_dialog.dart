@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:md_engine/src/core/util/md_extensions.dart';
 
 import '../core/base/md_state.dart';
 import 'md_appbar.dart';
@@ -136,7 +137,7 @@ class _MdSelectFieldDialogState extends MdState<MdSelectFieldDialog> {
         children: [
           Expanded(
             child: MdTextFormField(
-              labelText: tr.shared.search(),
+              labelText: "shared.search".tr(context),
               validateOnType: true,
               onChanged: (val) => {
                 setState(() {

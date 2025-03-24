@@ -5,7 +5,8 @@ import '../i18n/fk_translate_processor.dart';
 abstract class MdStateless extends Widget {
   MdStateless({super.key});
   final _contextMemStore = _ContextMemStore();
-
+  @Deprecated(
+      "Function deprecated due to code obfuscation issue. Please use Tr.<YOUR_TRANSLATION>. Denerated by dart run md_engine i18n")
   dynamic get tr => FkTranslatorProcessor(context);
 
   void _refreshContext(context) {

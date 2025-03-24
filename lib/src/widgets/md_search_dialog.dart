@@ -164,7 +164,7 @@ class _MdSearchDialogState<T> extends MdState<MdSearchDialog<T>> {
                     keyboardType: widget.keyboardType,
                     wdKey: ValueKey("finder-$hashCode"),
                     controller: _searchController,
-                    labelText: widget.label ?? tr.shared.search(),
+                    labelText: widget.label ?? "shared.search".tr(context),
                     inputFormatters:
                         _inputFormatters.map((e) => e.formatter).toList(),
                     validator: widget.validator,

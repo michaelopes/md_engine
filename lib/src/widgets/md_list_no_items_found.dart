@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:md_engine/src/core/base/md_stateless.dart';
+import 'package:md_engine/src/core/util/md_extensions.dart';
 
 import 'md_height.dart';
 
@@ -34,7 +35,7 @@ class MdListNoItemsFound extends MdStateless {
         ],
         if (showTitle) ...[
           Text(
-            title ?? tr.no_items_found.title(),
+            title ?? "no_items_found.title".tr(context),
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.onSurface,
             ),
@@ -44,7 +45,7 @@ class MdListNoItemsFound extends MdStateless {
         SizedBox(
           width: 300,
           child: Text(
-            message ?? tr.no_items_found.message(),
+            message ?? "no_items_found.message".tr(context),
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurface,
