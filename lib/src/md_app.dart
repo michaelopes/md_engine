@@ -7,7 +7,6 @@ import 'package:md_engine/src/core/util/md_state_engine.dart';
 
 import 'core/i18n/app_localizations.dart';
 import 'core/i18n/i18n.dart';
-import 'core/util/md_screen_utility.dart';
 
 typedef AppStepCallback = Future<void> Function();
 typedef AppStepBindingCallback = Future<void> Function(WidgetsBinding binding);
@@ -51,6 +50,9 @@ class MdApp {
   static void refresh({bool resetRoutes = false}) {
     _state.refresh();
   }
+
+  static late BuildContext _context;
+  static BuildContext get context => _context;
 
   Future<void> run({
     required MdHttpDriverOptions httpDriverOptions,
@@ -304,12 +306,14 @@ class __MdAppState extends State<_MdApp> {
 
   @override
   Widget build(BuildContext context) {
-    MdScreenUtility.I.setContext(context);
     return MaterialApp.router(
       key: widget.appKey,
       actions: widget.actions,
       backButtonDispatcher: widget.backButtonDispatcher,
-      builder: widget.builder,
+      builder: (c, w) {
+        MdApp._context = c;
+        return widget.builder?.call(c, w) ?? w ?? Container();
+      },
       checkerboardOffscreenLayers: widget.checkerboardOffscreenLayers,
       checkerboardRasterCacheImages: widget.checkerboardOffscreenLayers,
       color: widget.color,

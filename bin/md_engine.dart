@@ -1,12 +1,16 @@
 import 'dart:io';
 import 'package:encrypt_env/src/command_runner.dart';
 import 'assets_commands_runner.dart';
+import 'tr_commands_runner.dart';
 
 Future<void> main(List<String> args) async {
   final newArgs = [...args]
     ..remove("env")
     ..remove("assets")
-    ..remove("all");
+    ..remove("all")
+    ..remove("i18n")
+    ..remove("--watch")
+    ..remove("-w");
 
   final envArgs = [
     "gen",
@@ -22,13 +26,24 @@ Future<void> main(List<String> args) async {
     envArgs.addAll(["--environment", "prod"]);
   }
 
-  if (args.contains("env")) {
+  if (args.contains("--watch") || args.contains("-w")) {
+    newArgs.add("-w");
+  }
+
+  final envEnabled = File("environment/environment.yaml").existsSync();
+
+  if (args.contains("env") && envEnabled) {
     await _flushThenExit(await EncryptEnvCommandRunner().run(envArgs));
   } else if (args.contains("assets")) {
     await AssetsCommandsRunner.run(newArgs);
+  } else if (args.contains("i18n")) {
+    await TrCommandsRunner.run(newArgs);
   } else if (args.contains("all")) {
+    await TrCommandsRunner.run(newArgs);
     await AssetsCommandsRunner.run(newArgs);
-    await _flushThenExit(await EncryptEnvCommandRunner().run(envArgs));
+    if (envEnabled) {
+      await _flushThenExit(await EncryptEnvCommandRunner().run(envArgs));
+    }
   }
 }
 
