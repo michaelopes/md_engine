@@ -47,7 +47,7 @@ class MdApp {
   }
 
   static late __MdAppState _state;
-  static void refresh({bool resetRoutes = false}) {
+  static void refresh() {
     _state.refresh();
   }
 
@@ -273,7 +273,7 @@ class __MdAppState extends State<_MdApp> {
     }
   }
 
-  void refresh({bool resetRoutes = false}) {
+  void refresh() {
     if (context.mounted) {
       setState(() {
         routerDelegate = MdDelegate(
@@ -282,9 +282,7 @@ class __MdAppState extends State<_MdApp> {
           observers: widget.navigatorObservers,
           initPath: widget.initRoutePath,
         );
-        if (resetRoutes) {
-          QR.replaceAll(routerDelegate.initPath ?? "/");
-        }
+        QR.replaceAll(routerDelegate.initPath ?? "/");
       });
     }
   }
