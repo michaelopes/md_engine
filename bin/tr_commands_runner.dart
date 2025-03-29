@@ -26,14 +26,20 @@ class TrCommandsRunner {
       final file = File(argResults["tr"]);
       dir = file.parent.path;
       final jsonContent = file.readAsStringSync();
-      final jsonMap = jsonDecode(jsonContent) as Map<String, dynamic>;
-      final generatedCode = Generator().run(jsonMap);
 
-      final outputFile = File('lib/generated/md_i18n.dart');
-      outputFile.createSync(recursive: true);
-      outputFile.writeAsStringSync(generatedCode);
-      // ignore: avoid_print
-      print('I18n atualizado.');
+      try {
+        final jsonMap = jsonDecode(jsonContent) as Map<String, dynamic>;
+        final generatedCode = Generator().run(jsonMap);
+
+        final outputFile = File('lib/generated/md_i18n.dart');
+        outputFile.createSync(recursive: true);
+        outputFile.writeAsStringSync(generatedCode);
+        // ignore: avoid_print
+        print('I18n atualizado.');
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
     }
 
     gen();
