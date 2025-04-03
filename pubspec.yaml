@@ -41,6 +41,7 @@ dependencies:
   widgets_to_image: ^1.0.0
   visibility_detector: ^0.4.0+2
   crypto: ^3.0.6
+  synchronized: ^3.3.0+3
 
 dev_dependencies:
   flutter_test:

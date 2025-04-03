@@ -24,6 +24,7 @@ export 'package:operance_datatable/operance_datatable.dart';
 export 'package:get_storage/get_storage.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:widgets_to_image/widgets_to_image.dart';
+export 'package:synchronized/synchronized.dart';
 
 export './src/md_app.dart';
 export './src/md_payment_icons.dart';
