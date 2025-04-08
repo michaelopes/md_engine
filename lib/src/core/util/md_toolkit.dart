@@ -146,6 +146,7 @@ class MdToolkit {
 
   T? enumFromString<T extends Enum>(List<T> ens, String? value) {
     if (value == null) return null;
+    if (value == "new") value = "nnew";
     for (var item in ens) {
       if (enumToString(item) == value ||
           enumToString(item, withUnderscore: true) == value) {

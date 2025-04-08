@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:md_engine/md_engine.dart';
 import 'package:md_engine/src/core/i18n/app_translate.dart';
@@ -49,53 +51,57 @@ extension QRContextExt on QRContext {
     return MdDelegate.isCurrentRouteDialog;
   }
 
-  Future<void> popAllUntilThis(BuildContext context) async {
-    if (!context.mounted) return;
-    final isCurrent = ModalRoute.isCurrentOf(context);
-    if (isCurrent == false) {
-      await QR.back();
-      return await popAllUntilThis(context);
-    }
+  Future<void> popUntilToCurrent() async {
+    await popUntil(QR.currentPath);
   }
 
-  Future<bool> popUntil(String target, [dynamic result]) async {
-    if (target.isEmpty) return false;
-    final entries = [...QR.history.entries]..removeAt(0);
-
-    if (entries.length > 1) {
-      final routeTarget =
-          target.startsWith("/") ? target.replaceFirst("/", "") : target;
-      final rootRouteName = entries.first.key.name;
-      final currentRouteName = QR.history.current.key.name;
-      final isDialogOpen = MdDelegate.isCurrentRouteDialog;
-      final c1 = rootRouteName == currentRouteName;
-      final c2 = currentRouteName == routeTarget;
-      if (!c1 && !c2 && !isDialogOpen) {
-        final beforeEntriesLength = entries.length;
-        await QR.navigator.removeLast(result: result);
-        final afterEntriesLength = (QR.history.entries.length - 1);
-        if (beforeEntriesLength > afterEntriesLength) {
-          return await popUntil(target, result);
-        }
-      } else if (isDialogOpen) {
-        Navigator.pop(QR.context!);
-        await Future.delayed(Duration(milliseconds: 10));
-        return await popUntil(target, result);
+  Future<void> popUntilNamed(String name) async {
+    final treeFilter = QR.treeInfo.namePath.entries.where((e) => e.key == name);
+    if (treeFilter.isNotEmpty) {
+      final path = treeFilter.first.value;
+      await popUntil(path);
+    } else {
+      final rootPath = QR.treeInfo.namePath["Root"];
+      if (rootPath != null && rootPath.isNotEmpty) {
+        await QR.popUntilOrPush(rootPath);
       }
     }
-    return true;
   }
 
-  Future<void> popUntilAndPushNamed(
-    String pushRouteName,
-    String popRouteName, {
-    Map<String, dynamic>? params,
-  }) async {
-    if (pushRouteName.isEmpty || popRouteName.isEmpty) return;
-    if (await popUntil(popRouteName)) {
-      Future.delayed(Duration(milliseconds: 50), () {
-        QR.pushName(pushRouteName, params: params);
-      });
+  Future<void> popUntil(String path) async {
+    final filter =
+        QR.history.entries.where((e) => Uri.parse(e.path).path == path);
+    if (filter.isNotEmpty) {
+      final route = filter.first;
+      final uri = Uri.parse(route.path);
+
+      if (uri.path == QR.currentPath) {
+        if (hasOpenedDialog) {
+          final bResult = await QR.back();
+          if (bResult == PopResult.PopupDismissed) {
+            return await popUntil(path);
+          }
+        }
+        return;
+      }
+
+      final treeFilter =
+          QR.treeInfo.namePath.entries.where((e) => e.value == uri.path);
+      if (treeFilter.isNotEmpty) {
+        String rName = treeFilter.first.key;
+        if (uri.path == "/") {
+          rName = treeFilter.last.key;
+        }
+        await QR.popUntilOrPushName(
+          rName,
+          params: filter.first.params.asValueMap,
+        );
+      }
+    } else {
+      final rootPath = QR.treeInfo.namePath["Root"];
+      if (rootPath != null && rootPath.isNotEmpty) {
+        await QR.popUntilOrPush(rootPath);
+      }
     }
   }
 }
