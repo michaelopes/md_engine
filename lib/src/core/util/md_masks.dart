@@ -42,7 +42,7 @@ class MdMasks {
       );
 
   TextInputMask get money => TextInputMask(
-        mask: '9+.999,99',
+        mask: ['999.999,99', '999.999.999,99', '99.999.999.999,99'],
         placeholder: '0',
         maxPlaceHolders: 3,
         reverse: true,
